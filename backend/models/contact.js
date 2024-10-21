@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const contactSchema = new mongoose.Schema({
   designation: {
@@ -35,4 +35,4 @@ const contactSchema = new mongoose.Schema({
 
 const Contacts = mongoose.model('Contacts', contactSchema);
 
-module.exports = Contacts;
+export default  Contacts;
