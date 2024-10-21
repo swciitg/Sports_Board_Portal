@@ -7,7 +7,7 @@ function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="absolute w-full h-auto font-poppins text-gray-200 bg-black">
+    <div className="z-50 absolute w-full h-auto font-poppins text-gray-200 bg-transparent ">
       <div className="w-full h-[132px] p-1 md:p-3">
         <div className="w-full h-full flex items-center justify-between px-5 md:px-10 lg:px-20 xl:px-40">
           <div className="flex items-center gap-2 md:gap-3 cursor-pointer">
@@ -61,7 +61,7 @@ function Header() {
       </div>
       <div
         style={isMenuOpen ? {} : { display: "none" }}
-        className="md:hidden flex w-full flex-col gap-3 p-5"
+        className="md:hidden flex w-full flex-col gap-3 p-5 absolute backdrop-blur-[3px]"
       >
         <Link
           to="/"
