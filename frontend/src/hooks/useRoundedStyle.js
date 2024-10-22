@@ -33,7 +33,7 @@ const useRoundedStyle = () => {
         position: "relative",
       }
     : {
-        borderRadius: "50% 50% 0% 0% / 100px 100px 0% 0%",
+        borderRadius: "60% 60% 0% 0% / 100px 100px 0% 0%",
         clipPath: "inset(0% 10% 0% 10%)",
         padding: "0 25%",
         width: "145%",
