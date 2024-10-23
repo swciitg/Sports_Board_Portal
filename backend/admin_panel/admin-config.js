@@ -5,12 +5,13 @@ import mongoose from "mongoose";
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
-import AboutUs from "../models/about.js";
-import Club from "../models/clubs.js";
+import AboutUs from "../models/aboutUs.js";
+import Club from "../models/club.js";
 import Contacts from "../models/contact.js"; 
 import Event from "../models/event.js";
 import Facilities from "../models/facilities.js";
 import TeamMember from "../models/teamMember.js";
+import clubMain from "../models/clubMain.js";
 
 const ADMINPANELROOT = "/admin";
 
@@ -39,7 +40,8 @@ const adminOptions = {
     Contacts,
     Event,
     Facilities,
-    TeamMember
+    TeamMember,
+    clubMain
   ],
   rootPath: ADMINPANELROOT,
   loginPath: ADMINPANELROOT + "/login",

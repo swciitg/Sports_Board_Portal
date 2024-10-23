@@ -1,43 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ScrollAnimation from "react-animate-on-scroll";
 import useScrollDirection from "../hooks/useScrollDirection";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-// Import components
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import RoundedDiv from "../components/RoundedDiv";
-
-const clubData = {
-  name: "Basketball",
-  topSection: {
-    text: "Empowering athletes something something content",
-    img: "/images/clubs/basketball.png",
-  },
-  aboutUsSection: {
-    text: `You are here for an overall development of your personality, so
-              to keep you healthy and fit, we have all the facilities for
-              sports, both indoor and outdoor. All outdoor sports like
-              athletics, swimming, cricket, football, hockey, basketball,
-              volleyball, etc. and indoor sports like table tennis, weight
-              lifting, chess, carrom, squash, etc. are actively played by all
-              throughout the year.`,
-    img: "/images/homepage/aboutus.png",
-  },
-  rulesSection: {
-    text: `You are here for an overall development of your personality, so
-              to keep you healthy and fit, we have all the facilities for
-              sports, both indoor and outdoor. All outdoor sports like
-              athletics, swimming, cricket, football, hockey, basketball,
-              volleyball, etc. and indoor sports like table tennis, weight
-              lifting, chess, carrom, squash, etc. are actively played by all
-              throughout the year.`,
-    img: "/images/homepage/aboutus.png",
-  },
-};
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 function EachClubPage() {
   const scrollDirection = useScrollDirection();
+  const { name } = useParams(); // Get the dynamic club name from the URL
+  const [clubData, setClubData] = useState(null); // State to store club data
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchClubData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/club/${name}`); // Fetch club data by name
+        console.log(response.data) // Fetch club data by name
+        setClubData(response.data); // Store fetched data in state
+      } catch (err) {
+        setError("Failed to load club data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchClubData(); 
+  }, [name]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div>
@@ -88,17 +84,17 @@ function EachClubPage() {
           </div>
         </div>
         {/* Rules and guidelines section */}
-        <RoundedDiv Element={RulesAndGuidelinesSection} bg="#7BB9C4" />
+        <RoundedDiv Element={()=> <RulesAndGuidelinesSection clubData={clubData}/>} bg="#7BB9C4" />
         {/* Past Events and acheivements sections */}
         <RoundedDiv
-          Element={PastEventsAndAcheivementsSection}
+          Element={()=> <PastEventsAndAcheivementsSection clubData={clubData}/>}
           bg="#F5F5F5"
           top="-200px"
         />
         {/* Gallery Section */}
-        <RoundedDiv Element={GallerySection} bg="#7BB9C4" top="-300px" />
+        <RoundedDiv Element={()=> <GallerySection clubData={clubData}/>} bg="#7BB9C4" top="-300px" />
         {/* Team Leaders Section */}
-        <RoundedDiv Element={TeamLeadersSection} bg="#F5F5F5" top="-400px" />
+        <RoundedDiv Element={()=> <TeamLeadersSection clubData={clubData}/>} bg="#F5F5F5" top="-400px" />
       </div>
       <Footer />
     </div>
@@ -106,7 +102,7 @@ function EachClubPage() {
 }
 
 // Each section is defined seprately to animate
-const RulesAndGuidelinesSection = () => {
+const RulesAndGuidelinesSection = ({clubData}) => {
   const scrollDirection = useScrollDirection();
   return (
     <div className="w-full flex flex-col md:flex-row md:justify-between md:items-start px-10 md:px-20 pb-[50vw] sm:pb-[35vw] md:pb-[15vw] lg:pb-[10vw]">
@@ -137,7 +133,7 @@ const RulesAndGuidelinesSection = () => {
     </div>
   );
 };
-const PastEventsAndAcheivementsSection = () => {
+const PastEventsAndAcheivementsSection = ({clubData}) => {
   const scrollDirection = useScrollDirection();
   return (
     <div className="space-y-8 pb-[83vw] xs:pb-[60vw] sm:pb-[40vw] md:pb-[15vw] lg:pb-[13vw]">
@@ -198,7 +194,7 @@ const PastEventsAndAcheivementsSection = () => {
     </div>
   );
 };
-const GallerySection = () => {
+const GallerySection = ({clubData}) => {
   return (
     <div className="w-full flex flex-col md:flex-row md:justify-between md:items-start px-10 md:px-20 pb-[115vw] xs:pb-[80vw] sm:pb-[57vw] md:pb-[40vw] lg:pb-[30vw] xl:pb-[22vw]">
       {/* Text Section */}
@@ -243,7 +239,7 @@ const GallerySection = () => {
     </div>
   );
 };
-const TeamLeadersSection = () => {
+const TeamLeadersSection = ({clubData}) => {
   return (
     <div className="w-full flex flex-col md:flex-row md:justify-between md:items-start px-10 md:px-20">
       {/* Text Section */}

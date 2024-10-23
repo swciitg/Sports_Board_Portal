@@ -9,14 +9,17 @@ function AllClubsHeroSection() {
     {
       name: "BASKETBALL",
       img: "/images/clubs/wide.png",
+      safeName:"basket"
     },
     {
       name: "AQUATICS",
       img: "/images/clubs/wide.png",
+      safeName:"aqua"
     },
     {
       name: "HOCKEY",
       img: "/images/clubs/wide.png",
+      safeName:"hock"
     },
     {
       name: "ATHLETICS",
@@ -25,34 +28,42 @@ function AllClubsHeroSection() {
     {
       name: "VOLLEYBALL",
       img: "/images/clubs/wide.png",
+      safeName:"volley"
     },
     {
       name: "CRICKET",
       img: "/images/clubs/wide.png",
+      safeName:"cric"
     },
     {
       name: "LAWN TENNIS",
       img: "/images/clubs/wide.png",
+      safeName:"lawn"
     },
     {
       name: "TABLE TENNIS",
       img: "/images/clubs/wide.png",
+      safeName:"table"
     },
     {
       name: "FOOTBALL",
       img: "/images/clubs/wide.png",
+      safeName:"foot"
     },
     {
       name: "SQUASH",
       img: "/images/clubs/wide.png",
+      safeName:"squa"
     },
     {
       name: "BADMINTON",
       img: "/images/clubs/wide.png",
+      safeName:"badm"
     },
     {
       name: "WEIGHTLIFTING",
       img: "/images/clubs/wide.png",
+      safeName:"weight"
     },
   ];
 
