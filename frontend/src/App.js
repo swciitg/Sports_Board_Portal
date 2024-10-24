@@ -15,7 +15,7 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="/contacts" element={<ContactsPage />} />
           <Route path="/clubs" element={<AllClubsPage />} />
-          <Route path="/club/:id" element={<EachClubPage />} />
+          <Route path="/club/:name" element={<EachClubPage />} />
           <Route path="/events" element={<EachEventPage />} />
           <Route path="/event/:id" element={<EachEventPage />} />
         </Route>

@@ -1,36 +1,42 @@
 import dotenv from "dotenv";
-import express from "express";
+import express, { urlencoded } from "express";
 import mongoose from "mongoose";
+import router from "./routes/user.routes.js";
 import { adminRouter, admin } from "./admin_panel/admin-config.js";
+import cors from "cors";
 
 // Initialize dotenv to load environment variables
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
-const url = process.env.MONGO_URI;
+const PORT = process.env.PORT || 8000;
+const url = process.env.MONGO_URI || "mongodb://localhost:27017/sports";
 
 // Debug: Check if MONGO_URI is loaded
 console.log("MONGO_URI:", url);
 
 // Connect to MongoDB
-mongoose.connect(url);
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
-
 db.on("error", console.error.bind(console, "Connection error:"));
 db.once("open", () => {
   console.log("Database connected");
 });
 
 const app = express();
-console.log(admin.options.rootPath);
-console.log(adminRouter);
-
-// Middleware for admin router
+var corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
 app.use(admin.options.rootPath, adminRouter);
-
-// Middleware to parse JSON
+// Apply CORS Middleware
+app.use(cors(corsOptions));
+// Middleware to parse incoming requests
+app.use(urlencoded({ extended: true }));
 app.use(express.json());
+app.use('/api', router);
+// Use user and admin routers
+
 
 // Start the server
 app.listen(PORT, () => {

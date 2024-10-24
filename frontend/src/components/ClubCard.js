@@ -1,8 +1,15 @@
-import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function ClubCard({ index, clubData }) {
   const navigate = useNavigate();
+
+  // Handle navigation to the club details page using URL-friendly names
+  const handleNavigate = () => {
+    const urlSafeName = clubData.name.replace(/\s+/g, "-").toLowerCase();
+    console.log(urlSafeName) // Replace spaces with hyphens
+    navigate(`/club/${urlSafeName}`); // Navigate to dynamic route
+  };
 
   return (
     <div
@@ -11,7 +18,7 @@ function ClubCard({ index, clubData }) {
           ? "right-[15vw] md:right-[25vw]"
           : "left-[15vw] md:left-[25vw]"
       }`}
-      onClick={() => navigate(`/club/${clubData.name.replace(/\s/g, " ")}`)}
+      onClick={handleNavigate} // Trigger navigation on click
     >
       <img
         src={clubData.img}
@@ -29,3 +36,4 @@ function ClubCard({ index, clubData }) {
 }
 
 export default ClubCard;
+ 

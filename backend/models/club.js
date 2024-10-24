@@ -34,6 +34,10 @@ const clubSchema = new mongoose.Schema({
     type: [String],
     required: true,
   },
+  safeName: {
+    type: String,
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
