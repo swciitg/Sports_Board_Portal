@@ -1,4 +1,3 @@
-import Club from "../models/club.js";
 import clubMain from "../models/clubMain.js";
 
 export const getAllClub = async (req, res) => {
