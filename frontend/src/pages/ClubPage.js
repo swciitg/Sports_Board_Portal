@@ -19,9 +19,8 @@ function EachClubPage() {
   useEffect(() => {
     const fetchClubData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/club/${name}`); // Fetch club data by name
-        console.log(response.data) // Fetch club data by name
-        setClubData(response.data); // Store fetched data in state
+        const response = await axios.get(`http://localhost:8000/api/club/${name}`); 
+        setClubData(response.data); 
       } catch (err) {
         setError("Failed to load club data.");
       } finally {

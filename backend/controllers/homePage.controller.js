@@ -1,4 +1,3 @@
-// Import models correctly
 import AboutUs from '../models/aboutUs.js';
 import Facilities from '../models/facilities.js';
 import TeamMember from '../models/teamMember.js';

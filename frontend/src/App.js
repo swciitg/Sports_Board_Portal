@@ -6,10 +6,11 @@ import AllClubsPage from "./pages/AllClubsPage";
 import EachClubPage from "./pages/ClubPage";
 import AllEventsPage from "./pages/AllEventsPage";
 import EachEventPage from "./pages/EventPage";
+const BASEURL = process.env.REACT_APP_BASEURL;
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={`/${BASEURL}`} >
       <Routes>
         <Route path="/">
           <Route index element={<HomePage />} />

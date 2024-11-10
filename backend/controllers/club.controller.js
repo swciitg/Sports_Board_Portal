@@ -5,7 +5,7 @@ export const getAllClub = async (req, res) => {
 
   try {
     const club = await clubMain.find();
-    console.log("vdvbib")
+
 
     if (!club) {
       return res.status(404).json({ message: "Club not found" });

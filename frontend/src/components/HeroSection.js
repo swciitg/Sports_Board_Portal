@@ -5,13 +5,13 @@ import Event from "./Event";
 function HeroSection() {
   const roundedStyle = useRoundedStyle();
   const { data, loading, error } = useHomePageData();
-  console.log(data);
+
 
   if (loading) return <div>Loading...</div>; // Display loading state
   if (error) return <div>Error fetching homepage data.</div>; // Handle errors
 
   const { aboutData, facilities, teamMember } = data;
-  console.log(teamMember);
+
 
   return (
     <div className="w-full overflow-x-hidden font-poppins flex flex-col items-center">
