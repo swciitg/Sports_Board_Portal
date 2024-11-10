@@ -13,11 +13,11 @@ import Facilities from "../models/facilities.js";
 import TeamMember from "../models/teamMember.js";
 import clubMain from "../models/clubMain.js";
 
-const ADMINPANELROOT = "/admin";
+const ADMINPANELROOT = "/backend/admin";
 
 const DEFAULT_ADMIN = {
-  email: "g.avinash@iitg.ac.in",
-  password: "admin",
+  email: process.env.ADMIN_EMAIL,
+  password: process.env.ADMIN_PASSWORD,
 };
 
 AdminJS.registerAdapter({
@@ -52,8 +52,8 @@ const admin = new AdminJS(adminOptions);
 
 const adminRouter = AdminJSExpress.buildAuthenticatedRouter(admin, {
   authenticate,
-  cookieName: "adminjs",
-  cookiePassword: "sessionsecret",
+  cookieName: process.env.COOKIE_NAME,
+  cookiePassword: process.env.COOKIE_PASSWORD,
 }, null, {
   resave: false,
   saveUninitialized: true,

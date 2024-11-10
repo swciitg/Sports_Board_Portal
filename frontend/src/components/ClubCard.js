@@ -7,8 +7,7 @@ function ClubCard({ index, clubData }) {
   // Handle navigation to the club details page using URL-friendly names
   const handleNavigate = () => {
     const urlSafeName = clubData.name.replace(/\s+/g, "-").toLowerCase();
-    console.log(urlSafeName) // Replace spaces with hyphens
-    navigate(`/club/${urlSafeName}`); // Navigate to dynamic route
+    navigate(`/club/${urlSafeName}`); 
   };
 
   return (

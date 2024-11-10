@@ -10,9 +10,9 @@ export const useHomePageData = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  useEffect(async () => {
     // Fetch the data from the backend
-    axios.get('http://localhost:8000/api/home')
+   const response = await axios.get(`${process.env.API_BASE_URL}/home`)
       .then((response) => {
         setData(response.data); // Set the combined response data
         setLoading(false);

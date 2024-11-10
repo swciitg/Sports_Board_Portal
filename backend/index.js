@@ -9,10 +9,8 @@ import cors from "cors";
 dotenv.config();
 
 const PORT = process.env.PORT || 8000;
-const url = process.env.MONGO_URI || "mongodb://localhost:27017/sports";
+const url = process.env.MONGO_URI ;
 
-// Debug: Check if MONGO_URI is loaded
-console.log("MONGO_URI:", url);
 
 // Connect to MongoDB
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -20,12 +18,12 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Connection error:"));
 db.once("open", () => {
-  console.log("Database connected");
+  // console.log("Database connected");
 });
 
 const app = express();
 var corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: process.env.CORS_ORIGIN,
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 app.use(admin.options.rootPath, adminRouter);
