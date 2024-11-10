@@ -16,7 +16,7 @@ function ContactsPage() {
   useEffect(() => {
     const fetchContacts = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/contacts"); // Adjust API endpoint
+        const response = await axios.get(`${process.env.API_BASE_URL}/contacts`);
         setContacts(response.data);
         setLoading(false);
       } catch (err) {
