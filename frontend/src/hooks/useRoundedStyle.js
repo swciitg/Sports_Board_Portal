@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-// Custom hook to check if the device is mobile
-const useIsMobile = () => {
+// Combined hook to return rounded style based on mobile status
+const useRoundedStyle = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
@@ -16,13 +16,6 @@ const useIsMobile = () => {
       window.removeEventListener("resize", updateMobileStatus);
     };
   }, []);
-
-  return isMobile;
-};
-
-// Combined hook to return rounded style based on mobile status
-const useRoundedStyle = () => {
-  const isMobile = useIsMobile();
 
   const roundedStyle = isMobile
     ? {
