@@ -45,6 +45,12 @@ function Header() {
               Events
             </Link>
             <Link
+              to="/swb"
+              className="hover:text-[#7BB9C4] hover:underline underline-offset-[5px] duration-100"
+            >
+              SWB
+            </Link>
+            <Link
               to="/contacts"
               className="hover:text-[#7BB9C4] hover:underline underline-offset-[5px] duration-100"
             >
@@ -82,6 +88,13 @@ function Header() {
           className="cursor-pointer text-gray-200 hover:text-gray-300 duration-100"
         >
           Events
+        </Link>
+        <hr />
+        <Link
+          to="/swb"
+          className="cursor-pointer text-gray-200 hover:text-gray-300 duration-100"
+        >
+          SWB
         </Link>
         <hr />
         <Link
