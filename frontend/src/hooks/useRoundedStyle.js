@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 
-// Combined hook to return rounded style based on mobile status
 const useRoundedStyle = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -11,7 +10,6 @@ const useRoundedStyle = () => {
 
     window.addEventListener("resize", updateMobileStatus);
 
-    // Cleanup event listener on unmount
     return () => {
       window.removeEventListener("resize", updateMobileStatus);
     };

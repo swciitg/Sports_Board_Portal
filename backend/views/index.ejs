@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload Portal</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .logout-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .logout-link:hover {
+            color: #c0392b;
+        }
+
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            align-items: center;
+            padding: 20px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            padding: 12px;
+            border: 1px solid #bdc3c7;
+            border-radius: 6px;
+            flex-grow: 1;
+        }
+
+        button[type="submit"] {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        .file-list {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        .file-list li {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-link {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .file-link:hover {
+            color: #2980b9;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .delete-button, .copy-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .copy-button {
+            background-color: #27ae60;
+        }
+
+        .delete-button:hover {
+            background-color: #c0392b;
+        }
+
+        .copy-button:hover {
+            background-color: #219653;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+            }
+
+            form {
+                flex-direction: column;
+            }
+
+            input[type="text"],
+            input[type="file"],
+            button[type="submit"] {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .file-list li {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .file-actions {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, <%= user %>!</h1>
+        <a href="/image/logout" class="logout-link">Logout</a>
+
+        <h2>Upload a File</h2>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="text" name="imageName" required placeholder="Enter image name" />
+            <input type="file" name="myFile" required />
+            <button type="submit">Upload</button>
+        </form>
+
+        <h2>Uploaded Files</h2>
+        <ul class="file-list">
+            <% files.forEach(file => { %>
+                <li>
+                    <a href="/<%= file %>" target="_blank" class="file-link"><%= file %></a>
+                    <div class="file-actions">
+                        <button class="copy-button" data-url="/<%= file %>">Copy URL</button>
+                        <a href="/upload/delete/<%= file %>" class="delete-button">Delete</a>
+                    </div>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const copyButtons = document.querySelectorAll('.copy-button');
+
+            copyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const imageUrl = this.getAttribute('data-url');
+                    navigator.clipboard.writeText(imageUrl)
+                        .then(() => {
+                            alert('Image URL copied to clipboard!');
+                        })
+                        .catch(err => {
+                            console.error('Failed to copy URL: ', err);
+                        });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

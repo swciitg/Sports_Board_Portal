@@ -6,26 +6,21 @@ export const useHomePageData = () => {
     aboutData: [],
     facilities: [],
     teamMember: [],
+    homepage: [],
   });
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect( () => {
-    // Fetch the data from the backend
-  const fetchData = async () => {
-    await axios.get(`${process.env.API_BASE_URL}/home`)
-    .then((response) => {
-      setData(response.data); // Set the combined response data
-      setLoading(false);
-    })
-    .catch((err) => {
-      setError(err);
-      setLoading(false);
-    });
-
+    const fetchData = async () => {
+      await axios.get(`${process.env.REACT_APP_API_BASE_URL}/home`)
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((err) => {
+        setError(err);
+      });
+    };
     fetchData();
-  }
   }, []);
-
-  return { data, loading, error };
+  return { data, error };
 };

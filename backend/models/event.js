@@ -6,6 +6,10 @@ const eventSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  eventPdf: {
+    type: String,
+    required: true,
+  },
   frontImage: {
     type: String,
     required: true,
