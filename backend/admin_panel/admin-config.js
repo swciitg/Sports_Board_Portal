@@ -13,7 +13,7 @@ import TeamMember from "../models/teamMember.js";
 import clubMain from "../models/clubMain.js";
 import homepage from "../models/general.js";
 
-const ADMINPANELROOT = "/welfare-board/api/admin";
+const ADMINPANELROOT = "/sports-board/api/admin";
 
 const DEFAULT_ADMIN = {
   email: process.env.ADMIN_EMAIL,

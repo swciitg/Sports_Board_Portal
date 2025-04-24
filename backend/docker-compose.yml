@@ -7,17 +7,17 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - welfare_board_images:/usr/src/app/backend/images
+      - sports_board_images:/usr/src/app/backend/images
     ports:
-      - "8070:3001"
+      - "2026:3001"
     env_file:
-      - .env
+      - ".env"
     networks:
-      - backend_welfare-board-strapi
+      - backend_sports-board-strapi
 
 volumes:
-  welfare_board_images:
+  sports_board_images:
 
 networks:
-  backend_welfare-board-strapi:
+  backend_sports-board-strapi:
     external: true

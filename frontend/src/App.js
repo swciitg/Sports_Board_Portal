@@ -4,7 +4,7 @@ import ContactsPage from "./pages/ContactsPage";
 import AllClubsPage from "./pages/AllClubsPage";
 import EachClubPage from "./pages/ClubPage";
 import EachEventPage from "./pages/EventPage";
-const BASEURL = process.env.REACT_APP_BASEURL||"/sports-board";
+const BASEURL = process.env.REACT_APP_BASEURL||"sports-board";
 
 function App() {
   return (

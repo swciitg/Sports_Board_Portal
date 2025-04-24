@@ -2,15 +2,15 @@ version: "3.3"
 
 services:
   web:
-    image: welfare_board_frontendp
-    container_name: welfare_board_frontend
+    image: sports_board_frontend_new
+    container_name: sports_board_frontend_new
     restart: always
     build:
         context: .
     ports:
-      - "9835:3000"
+      - "3019:3000"
     env_file:
-    - ".env.frontend"
+    - ".env"
     command: sh -c "cd /app && serve -s build"
     networks:
       - frontend_default
