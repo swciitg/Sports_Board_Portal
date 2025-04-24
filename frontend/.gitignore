@@ -1,4 +1,3 @@
-node_modules
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -16,6 +15,7 @@ node_modules
 .DS_Store
 .env
 .env.local
+.env.frontend
 .env.development.local
 .env.test.local
 .env.production.local

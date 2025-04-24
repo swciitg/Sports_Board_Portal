@@ -2,25 +2,27 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { IoMenu } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
+import swbLogo from "../assets/swb_logo.png";
+import { useHomePageData } from "../hooks/useHomePageData";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const { data, error } = useHomePageData();
+// console.log("data", data);
   return (
-    <div className="z-50 absolute w-full h-auto font-poppins text-gray-200 bg-transparent ">
+    <div className="z-50 absolute w-full h-auto font-poppins  bg-transparent ">
       <div className="w-full h-[132px] p-1 md:p-3">
         <div className="w-full h-full flex items-center justify-between px-5 md:px-10 lg:px-20 xl:px-40">
           <div className="flex items-center gap-2 md:gap-3 cursor-pointer">
             <img
-              src="/sgc_logo.jpg"
-              alt="Students Gymkhana Council"
-              className="w-[61px] h-[66px] md:w-[86px] md:h-[92px]"
+              src={data?.homepage[0]?.logoimgurl}
+              alt="Sports Board IIT Guwahati"
+              className="w-[61px] h-[66px] md:w-[86px] md:h-[92px] object-contain"
             />
             <div className="leading-4 md:leading-6 text-xs md:text-base">
               <p className="font-semibold">
-                STUDENTS
-                <br /> GYMKHANA <br />
-                COUNCIL
+                SPORTS
+                <br /> BOARD <br />
               </p>
               <p className="font-extralight md:font-light">IIT Guwahati</p>
             </div>
@@ -83,6 +85,7 @@ function Header() {
         >
           Events
         </Link>
+        <hr />
         <hr />
         <Link
           to="/contacts"

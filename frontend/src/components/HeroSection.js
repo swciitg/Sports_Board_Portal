@@ -1,29 +1,25 @@
 import useRoundedStyle from "../hooks/useRoundedStyle";
 import { useHomePageData } from "../hooks/useHomePageData";
-import Event from "./Event";
 
 function HeroSection() {
   const roundedStyle = useRoundedStyle();
-  const { data, loading, error } = useHomePageData();
+  const { data, error } = useHomePageData();
+// console.log("data", data);
 
+  // if (loading) return <div>Loading...</div>; // Display loading state
+  // if (error) return <div>Error fetching homepage data.</div>; // Handle errors
 
-  if (loading) return <div>Loading...</div>; // Display loading state
-  if (error) return <div>Error fetching homepage data.</div>; // Handle errors
-
-  const { aboutData, facilities, teamMember } = data;
+  const teamMember = data ? data.teamMember : [];
 
 
   return (
     <div className="w-full overflow-x-hidden font-poppins flex flex-col items-center">
       <div
         className="w-full h-[865px] bg-top bg-cover bg-no-repeat flex flex-col items-center justify-center gap-5 text-gray-200 sticky top-0 z-0"
-        style={{ backgroundImage: "url('/images/homepage/homepage.png')" }}
+        style={{ backgroundImage: `url(${data?.homepage[0]?.heroimage})` }}
       >
         <p className="text-4xl md:text-7xl font-semibold tracking-tight text-center">
-          LOREM IPSUM
-        </p>
-        <p className="text-sm sm:text-base md:text-lg tracking-tight text-center">
-          Empowering atheles something something content.
+          SPORTS BOARD IIT GUWAHATI
         </p>
       </div>
       {/* 2nd div */}
@@ -35,7 +31,7 @@ function HeroSection() {
           {/* Image Section */}
           <div className="w-[460px] h-[470px] basis-1/2">
             <img
-              src="/images/homepage/aboutus.png"
+              src={data?.aboutData[0]?.image}
               alt="Sports activity"
               className="w-[460px] h-[470px] object-cover"
             />
@@ -45,85 +41,18 @@ function HeroSection() {
           <div className="text-left basis-1/2">
             {/* Title */}
             <h1 className="text-[#0C0D0D] font-semibold text-[96px] leading-none font-[Fira Sans Extra Condensed]">
-              ABOUT US.
+              ABOUT US<span className="text-[#7BB9C4]">.</span>
             </h1>
 
             {/* Paragraph */}
-            <p className="text-[#565656] text-[24px] leading-relaxed font-[Familjen Grotesk]">
-              {aboutData[0].description}
-            </p>
+            <p className="text-[#565656] text-[15px] leading-relaxed font-[Familjen Grotesk]">
+            {data?.aboutData[0]?.description}
+               </p>
           </div>
         </div>
       </div>
-      {/* 3rd div */}
-      <div
-        style={roundedStyle}
-        className="top-[-10rem] md:top-[-10rem] bg-[#7BB9C4] flex flex-col justify-center items-center"
-      >
-        {/* Outer Div */}
-        <div className="mb-[10rem] pt-[10rem] w-full lg:w-[1440px] h-auto lg:h-[1440px] flex flex-col justify-between">
-          {/* Inner Divs */}
-          <Event
-            number="01"
-            title="SPARDHA"
-            imageUrl="/images/clubs/wide.png"
-          />
-          <Event
-            number="02"
-            title="INTER IIT"
-            imageUrl="/images/clubs/wide.png"
-          />
-          <Event number="03" title="SPIRIT" imageUrl="/images/clubs/wide.png" />
-          <Event
-            number="04"
-            title="MANTHAN"
-            imageUrl="/images/clubs/wide.png"
-          />
-        </div>
-      </div>
-      {/* Facilities Section */}
-      <div
-        className="top-[-15rem] md:top-[-15rem] bg-[#F5F5F5] w-full flex flex-col md:flex-row md:justify-between md:items-start px-10 md:px-20 pb-[115vw] xs:pb-[80vw] sm:pb-[57vw] md:pb-[40vw] lg:pb-[30vw] xl:pb-[22vw]"
-        style={roundedStyle}
-      >
-        {/* Text Section */}
-        <div className="md:ml-10 mt-20 w-full md:w-[30%] text-center md:text-left flex flex-col items-center md:items-start space-y-1">
-          <h1 className="mb-10 text-[6vw] leading-none font-semibold text-[#0C0D0D] font-[Fira Sans Extra Condensed]">
-            Our Facilities
-          </h1>
-          <p className="text-[3vw] md:text-[2vw] leading-relaxed text-[#565656] font-[Familjen Grotesk]">
-            We provide comprehensive sports facilities for both indoor and
-            outdoor activities to ensure your overall development.
-          </p>
-        </div>
 
-        {/* Image Section */}
-        <div className="md:d mt-20 mb-[10rem] w-[825px] h-[690px] grid-cols-3 grid-rows-2 gap-4 overflow-hidden lg:w-[825px] lg:h-[690px] lg:grid lg:grid-cols-3 lg:grid-rows-2 lg:gap-4 hidden md:grid">
-          {/* For Laptop */}
-          {facilities.map((facility, index) => (
-            <div key={index} className="w-[240px] h-[330px]">
-              <img
-                src={facility.image}
-                alt={facility.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ))}
-        </div>
 
-        {/* For Mobile Phones */}
-        <div className="mt-20 gap-4 mb-[10rem] w-full h-[330px] flex overflow-x-scroll scrollbar-thin lg:hidden">
-          {facilities.map((facility, index) => (
-            <div key={index} className="w-[240px] h-[330px] flex-shrink-0">
-              <img
-                src={facility.image}
-                alt={facility.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
       <div
         className="top-[-20rem] bg-[#7BB9C4] w-full flex flex-col md:flex-row md:justify-between md:items-start px-10 md:px-20 pb-[115vw] xs:pb-[80vw] sm:pb-[57vw] md:pb-[40vw] lg:pb-[30vw] xl:pb-[22vw]"
         style={roundedStyle}
@@ -131,18 +60,14 @@ function HeroSection() {
         {/* Text Section */}
         <div className="md:ml-10 mt-20 w-full md:w-[30%] text-center md:text-left flex flex-col items-center md:items-start space-y-1">
           <h1 className="mb-10 text-[6vw] leading-none font-semibold text-[#0C0D0D] font-[Fira Sans Extra Condensed]">
-            Team Members
+            Team Members<span className="text-[#fff]">.</span>
           </h1>
-          <p className="text-[3vw] md:text-[2vw] leading-relaxed text-[#565656] font-[Familjen Grotesk]">
-            We provide comprehensive sports facilities for both indoor and
-            outdoor activities to ensure your overall development.
-          </p>
         </div>
 
         {/* Image Section */}
         <div className="md:d mt-20 mb-[10rem] w-[825px] h-[690px] grid-cols-3 grid-rows-2 gap-4 overflow-hidden lg:w-[825px] lg:h-[690px] lg:grid lg:grid-cols-3 lg:grid-rows-2 lg:gap-4 hidden md:grid">
           {/* For Laptop */}
-          {teamMember.map((member, index) => (
+          {teamMember && teamMember.map((member, index) => (
             <div key={index} className="w-[240px] h-[330px]">
               <img
                 src={member.image}
@@ -155,7 +80,7 @@ function HeroSection() {
 
         {/* For Mobile Phones */}
         <div className="mt-20 mb-[10rem] w-full h-[330px] gap-4 flex overflow-x-scroll scrollbar-thin lg:hidden">
-          {teamMember.map((member, index) => (
+          {teamMember && teamMember.map((member, index) => (
             <div key={index} className="w-[240px] h-[330px] flex-shrink-0">
               <img
                 src={member.image}
@@ -187,7 +112,7 @@ function HeroSection() {
           {/* Image Section */}
           <div className="z-10 w-full md:w-[50%] flex items-center justify-center">
             <img
-              src="images/clubs/wide.png"
+              src={data?.homepage[0]?.chairmanimgurl}
               alt="Chairman"
               className="w-[461px] h-[438px] object-cover"
             />
@@ -197,21 +122,19 @@ function HeroSection() {
           <div className="w-full md:w-[50%] text-center md:text-left flex flex-col items-center md:items-start justify-start space-y-1">
             {/* Title */}
             <h1 className="text-[6vw] leading-none font-semibold text-[#0C0D0D] font-[Fira Sans Extra Condensed]">
-              CHAIRMAN.
+              CHAIRMAN<span className="text-[#7BB9C4]">.</span>
             </h1>
             <p className="text-[3vw] md:text-[2vw] leading-relaxed text-[#565656] font-[Familjen Grotesk]">
-              Professor Deepak Sharma
+              {data?.homepage[0]?.chairmanname}
             </p>
             <p className="text-[3vw] md:text-[2vw] leading-relaxed text-[#565656] font-[Familjen Grotesk]">
-              Department of Mechanical Engineering
+              {data?.homepage[0]?.chairmandescription}
             </p>
             <h2 className="text-[4vw] leading-none font-semibold text-[#565656] font-[Familjen Grotesk] mt-4">
               Message from the Chairman-
             </h2>
             <p className="text-[3vw] md:text-[2vw] leading-relaxed text-[#565656] font-[Familjen Grotesk]">
-              You are here for an overall development of your personality, so to
-              keep you healthy and fit, we have all the facilities for sports,
-              both indoor and outdoor.
+              {data?.homepage[0]?.aboutchairman}
             </p>
           </div>
         </div>
@@ -221,21 +144,19 @@ function HeroSection() {
           <div className="w-full md:w-[50%] text-center md:text-left flex flex-col items-center md:items-start justify-start space-y-1">
             {/* Title */}
             <h1 className="text-[6vw] leading-none font-semibold text-[#0C0D0D] font-[Fira Sans Extra Condensed]">
-              GENERAL SECRETARY.
+              GENERAL SECRETARY<span className="text-[#7BB9C4]">.</span>
             </h1>
             <p className="text-[3vw] md:text-[2vw] leading-relaxed text-[#565656] font-[Familjen Grotesk]">
-              Professor Deepak Sharma
+              {data?.homepage[0]?.gensecname}
             </p>
             <p className="text-[3vw] md:text-[2vw] leading-relaxed text-[#565656] font-[Familjen Grotesk]">
-              Department of Mechanical Engineering
+              {data?.homepage[0]?.gensecdescription}
             </p>
             <h2 className="text-[4vw] leading-none font-semibold text-[#565656] font-[Familjen Grotesk] mt-4">
               Message from the Chairman-
             </h2>
             <p className="text-[3vw] md:text-[2vw] leading-relaxed text-[#565656] font-[Familjen Grotesk]">
-              You are here for an overall development of your personality, so to
-              keep you healthy and fit, we have all the facilities for sports,
-              both indoor and outdoor.
+              {data?.homepage[0]?.aboutgensec}
             </p>
           </div>
 
@@ -253,7 +174,7 @@ function HeroSection() {
           {/* Image Section */}
           <div className="z-10 w-full md:w-[50%] flex items-center justify-center">
             <img
-              src="images/clubs/wide.png"
+              src={data?.homepage[0]?.gensecimg}
               alt="Chairman"
               className="w-[461px] h-[438px] object-cover"
             />
