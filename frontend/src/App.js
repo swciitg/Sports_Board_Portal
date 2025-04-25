@@ -8,7 +8,7 @@ const BASEURL = process.env.REACT_APP_BASEURL||"sports-board";
 
 function App() {
   return (
-    <BrowserRouter basename={`/${BASEURL}`} >
+    <BrowserRouter basename={`${BASEURL}`} >
       <Routes>
         <Route path="/">
           <Route index element={<HomePage />} />
