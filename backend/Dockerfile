@@ -1,5 +1,5 @@
 FROM node:20-alpine
-WORKDIR /usr/src/app/backend
+WORKDIR /usr/src/app/sports_backend
 COPY package*.json ./
 RUN npm ci --production
 COPY . .

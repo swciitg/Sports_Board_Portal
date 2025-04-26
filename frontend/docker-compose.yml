@@ -1,7 +1,7 @@
 version: "3.3"
 
 services:
-  web:
+  sports_web:
     image: sports_board_frontend_new
     container_name: sports_board_frontend_new
     restart: always
