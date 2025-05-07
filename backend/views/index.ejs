@@ -176,7 +176,7 @@
         <a href="/image/logout" class="logout-link">Logout</a>
 
         <h2>Upload a File</h2>
-        <form action="/upload" method="post" enctype="multipart/form-data">
+            <form action="https://swc.iitg.ac.in/sports-board/api/upload" method="post" enctype="multipart/form-data">
             <input type="text" name="imageName" required placeholder="Enter image name" />
             <input type="file" name="myFile" required />
             <button type="submit">Upload</button>
@@ -186,9 +186,9 @@
         <ul class="file-list">
             <% files.forEach(file => { %>
                 <li>
-                    <a href="/<%= file %>" target="_blank" class="file-link"><%= file %></a>
+                    <a href="/sports-board/api/<%= file %>" target="_blank" class="file-link"><%= file %></a>
                     <div class="file-actions">
-                        <button class="copy-button" data-url="/<%= file %>">Copy URL</button>
+                        <button class="copy-button" data-url="https://swc.iitg.ac.in/sports-board/api/<%= file %>">Copy URL</button>
                         <a href="/upload/delete/<%= file %>" class="delete-button">Delete</a>
                     </div>
                 </li>
