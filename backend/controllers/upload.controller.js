@@ -10,7 +10,7 @@ export const uploadFile = (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
-  res.redirect('/upload');
+  res.redirect('sports-board/api/upload');
 };
 
 export const deleteFile = (req, res) => {
@@ -19,7 +19,7 @@ export const deleteFile = (req, res) => {
   if (fs.existsSync(filePath)) {
     fs.unlinkSync(filePath);
   }
-  res.redirect('/upload');
+  res.redirect('/sports-board/api/upload');
 };
 
 // Add a default export that aggregates the functions:
