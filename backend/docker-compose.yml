@@ -10,7 +10,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - sports_board_images:/usr/src/app/sports_backend/images
+      -  ./uploads:/usr/src/app/backend/uploads 
     ports:
       - "2026:3001"
     env_file:
@@ -18,8 +18,7 @@ services:
     networks:
       - backend_sports-board-strapi
 
-volumes:
-  sports_board_images:
+
 
 networks:
   backend_sports-board-strapi:
