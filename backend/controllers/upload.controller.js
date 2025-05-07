@@ -10,7 +10,7 @@ export const uploadFile = (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
-  res.redirect('sports-board/api/upload');
+  res.redirect('/sports-board/api/upload');
 };
 
 export const deleteFile = (req, res) => {
