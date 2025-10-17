@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 
 const user = {
-  username: process.env.ADMIN_EMAIL,
-  passwordHash: bcrypt.hashSync(process.env.ADMIN_PASSWORD, 10)
+  username: process.env.ADMIN_EMAIL || 'admin@sportsboard.com',
+  passwordHash: process.env.ADMIN_PASSWORD ? bcrypt.hashSync(process.env.ADMIN_PASSWORD, 10) : bcrypt.hashSync('admin123', 10)
 };
 
 export const getLoginPage = (req, res) => {
