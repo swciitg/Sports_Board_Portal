@@ -10,7 +10,7 @@ function Header() {
   const { data, error } = useHomePageData();
 // console.log("data", data);
   return (
-    <div className="z-50 absolute w-full h-auto font-poppins  bg-transparent ">
+    <div className="fixed top-0 left-0 w-full z-50 bg-white shadow-sm font-poppins transition-all duration-200">
       <div className="w-full h-[132px] p-1 md:p-3">
         <div className="w-full h-full flex items-center justify-between px-5 md:px-10 lg:px-20 xl:px-40">
           <div className="flex items-center gap-2 md:gap-3 cursor-pointer">
@@ -45,6 +45,12 @@ function Header() {
               className="hover:text-[#7BB9C4] hover:underline underline-offset-[5px] duration-100"
             >
               Events
+            </Link>
+              <Link
+              to="/"
+              className="hover:text-[#7BB9C4] hover:underline underline-offset-[5px] duration-100"
+            >
+              Anouncements
             </Link>
             <Link
               to="/contacts"
