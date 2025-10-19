@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from 'react-router-dom';
 import { IoMenu } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import swbLogo from "../assets/swb_logo.png";
@@ -8,99 +8,79 @@ import { useHomePageData } from "../hooks/useHomePageData";
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data, error } = useHomePageData();
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+   const navItems = [
+    { name: 'Home', slug: "/"},
+    { name: "Clubs", slug: "/clubs"},
+    { name: "Events", slug: "/events"},
+    { name: "Announcements", slug: "/announcements" },
+    { name: "Contacts", slug: "/contacts"},
+  ];
 // console.log("data", data);
   return (
-    <div className="fixed top-0 left-0 w-full z-50 bg-white shadow-sm font-poppins transition-all duration-200">
-      <div className="w-full h-[132px] p-1 md:p-3">
-        <div className="w-full h-full flex items-center justify-between px-5 md:px-10 lg:px-20 xl:px-40">
-          <div className="flex items-center gap-2 md:gap-3 cursor-pointer">
-            <img
-              src={data?.homepage[0]?.logoimgurl}
-              alt="Sports Board IIT Guwahati"
-              className="w-[61px] h-[66px] md:w-[86px] md:h-[92px] object-contain"
+    <>
+    <header className="shadow-lg sticky top-0 z-50 bg-white">
+      <div className="w-full mx-auto p-2 md:py-4 md:px-6">
+        <nav className="flex items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
+          {/* Logo */}
+          <div className="mr-4 gap-2 flex items-center">
+            <Link to="/">
+              <img src={data?.homepage[0]?.logoimgurl} alt="Sports Board IIT Guwahati" className="w-[61px] h-[66px] md:w-[86px] md:h-[92px] object-contain"
             />
-            <div className="leading-4 md:leading-6 text-xs md:text-base">
-              <p className="font-semibold">
-                SPORTS
-                <br /> BOARD <br />
-              </p>
-              <p className="font-extralight md:font-light">IIT Guwahati</p>
-            </div>
+            </Link>
+            <span className="font-bold text-md lg:text-xl text-gray-900 tracking-wide">SPORTS BOARD</span>
           </div>
-          <div className="hidden md:flex p-2 gap-5 md:gap-10 lg:gap-20">
-            <Link
-              to="/"
-              className="hover:text-[#7BB9C4] hover:underline underline-offset-[5px] duration-100"
-            >
-              Home
-            </Link>
-            <Link
-              to="/clubs"
-              className="hover:text-[#7BB9C4] hover:underline underline-offset-[5px] duration-100"
-            >
-              Clubs
-            </Link>
-            <Link
-              to="/events"
-              className="hover:text-[#7BB9C4] hover:underline underline-offset-[5px] duration-100"
-            >
-              Events
-            </Link>
-              <Link
-              to="/announcements"
-              className="hover:text-[#7BB9C4] hover:underline underline-offset-[5px] duration-100"
-            >
-              Anouncements
-            </Link>
-            <Link
-              to="/contacts"
-              className="hover:text-[#7BB9C4] hover:underline underline-offset-[5px] duration-100"
-            >
-              Contacts
-            </Link>
+          <ul className="hidden lg:flex items-center ml-auto space-x-4 text-md">
+            {navItems.map((item) =>
+              (
+                <li key={item.name}>
+                  <NavLink
+                    to={item.slug}
+                    className={({ isActive }) =>
+                      `inline-block px-4 py-2 duration-300 rounded-full font-medium transition-all text-center
+                      ${isActive ? "text-blue-700 bg-blue-50" : "text-gray-600 hover:text-blue-800 hover:bg-gray-50"}`
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
+                </li>
+              ) 
+            )}
+          </ul>
+
+          {/* Hamburger Menu Button (Visible on mobile) */}
+          <div className="lg:hidden flex">
+            <button onClick={toggleMenu}>
+              {isMenuOpen ? <RxCross2 size={24} /> : <IoMenu size={24} />}
+            </button>
           </div>
-          <div
-            onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="md:hidden pr-2 sm:pr-5 text-3xl cursor-pointer"
-          >
-            {isMenuOpen ? <RxCross2 /> : <IoMenu />}
+        </nav>
+        {/* Mobile Menu (Dropdown) */}
+        
+          <div className={`lg:hidden transition-all duration-300 ease-in-out overflow-hidden ${isMenuOpen ? 'max-h-screen' : 'max-h-0'}`}>
+            <ul className="flex flex-col items-start justify-center space-y-3  sm:space-y-4 pt-4 text-sm sm:text-base">
+              {navItems.map((item) =>
+                  (<li className='m-0 w-full' key={item.name}>
+                    <NavLink
+                      to={item.slug}
+                      onClick={toggleMenu} 
+                      className={({ isActive }) =>
+                        `inline-block px-4 py-2 duration-200 rounded-lg font-medium w-full text-center
+                        ${isActive ? "text-blue-700 bg-blue-50" : "text-gray-700 bg-gray-100 hover:text-blue-700"}`
+                      }
+                    >
+                      {item.name}
+                    </NavLink>
+                  </li>)
+              )}
+              
+            </ul>
           </div>
-        </div>
       </div>
-      <div
-        style={isMenuOpen ? {} : { display: "none" }}
-        className="md:hidden flex w-full flex-col gap-3 p-5 absolute backdrop-blur-[3px]"
-      >
-        <Link
-          to="/"
-          className="cursor-pointer text-gray-200 hover:text-gray-300 duration-100"
-        >
-          Home
-        </Link>
-        <hr />
-        <Link
-          to="/clubs"
-          className="cursor-pointer text-gray-200 hover:text-gray-300 duration-100"
-        >
-          Clubs
-        </Link>
-        <hr />
-        <Link
-          to="/events"
-          className="cursor-pointer text-gray-200 hover:text-gray-300 duration-100"
-        >
-          Events
-        </Link>
-        <hr />
-        <hr />
-        <Link
-          to="/contacts"
-          className="cursor-pointer text-gray-200 hover:text-gray-300 duration-100"
-        >
-          Contacts
-        </Link>
-      </div>
-    </div>
+    </header>
+    </>
   );
 }
 
