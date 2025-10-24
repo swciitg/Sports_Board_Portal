@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import ZigZagLine from "./ZigZagLine";
-import ClubCard from "./ClubCard";
 import ScrollAnimation from "react-animate-on-scroll";
-import RoundedDiv from "./RoundedDiv";
 import clubImg from "../assets/images/clubs/wide.png";
+
+import Loader from "./Loader";
+import ClubCard from "./ClubCard";
+import RoundedDiv from "./RoundedDiv";
+import ZigZagLine from "./ZigZagLine";
+
 function AllClubsHeroSection() {
   const BACKEND_BASE_URL=process.env.BACKEND_BASE_URL;
   const [clubsData, setClubsData] = useState([]);
@@ -27,6 +30,10 @@ function AllClubsHeroSection() {
         setLoading(false);
       });
   }, []);
+
+  if (loading) {
+        return <Loader isOpen={true} message="Loading Clubs Data..." />
+    }
 
   return (
     <div className="overflow-x-hidden font-poppins flex flex-col text-gray-200 bg-[#F5F5F5]">

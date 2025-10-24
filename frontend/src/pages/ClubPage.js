@@ -3,11 +3,9 @@ import ScrollAnimation from "react-animate-on-scroll";
 import useScrollDirection from "../hooks/useScrollDirection";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import RoundedDiv from "../components/RoundedDiv";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { Loader, RoundedDiv } from '../components';
 
 function EachClubPage() {
   const scrollDirection = useScrollDirection();
@@ -30,12 +28,13 @@ function EachClubPage() {
     fetchClubData();
   }, [name]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+      return <Loader isOpen={true} message={`Loading ${name} Club...`} />
+  }
   if (error) return <p>{error}</p>;
 
   return (
     <div>
-      <Header />
       <div className="overflow-hidden font-poppins flex flex-col">
         <div
           className="w-full h-[865px] bg-top bg-cover bg-no-repeat flex flex-col items-center justify-center gap-5 text-gray-200"
@@ -82,7 +81,6 @@ function EachClubPage() {
         <RoundedDiv Element={() => <GallerySection clubData={clubData} />} bg="#7BB9C4" top="-300px" />
         <RoundedDiv Element={() => <TeamLeadersSection clubData={clubData} />} bg="#F5F5F5" top="-400px" />
       </div>
-      <Footer />
     </div>
   );
 }
