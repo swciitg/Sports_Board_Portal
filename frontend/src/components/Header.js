@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, NavLink } from 'react-router-dom';
 import { IoMenu } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
-import swbLogo from "../assets/swb_logo.png";
+import sbLogo from "../assets/sports_board_logo.jpg";
 import { useHomePageData } from "../hooks/useHomePageData";
 
 function Header() {
@@ -27,7 +27,10 @@ function Header() {
           {/* Logo */}
           <div className="mr-4 gap-2 flex items-center">
             <Link to="/">
-              <img src={data?.homepage[0]?.logoimgurl} alt="Sports Board IIT Guwahati" className="w-[61px] h-[66px] md:w-[86px] md:h-[92px] object-contain"
+              <img 
+                src={sbLogo}
+                alt="Sports Board IIT Guwahati" 
+                className="w-[61px] h-[66px] md:w-[86px] md:h-[92px] object-contain"
             />
             </Link>
             <span className="font-bold text-md lg:text-xl text-gray-900 tracking-wide">SPORTS BOARD</span>
