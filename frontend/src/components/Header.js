@@ -47,7 +47,7 @@ function Header() {
               Events
             </Link>
               <Link
-              to="/"
+              to="/announcements"
               className="hover:text-[#7BB9C4] hover:underline underline-offset-[5px] duration-100"
             >
               Anouncements

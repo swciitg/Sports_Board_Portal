@@ -4,6 +4,8 @@ import ContactsPage from "./pages/ContactsPage";
 import AllClubsPage from "./pages/AllClubsPage";
 import EachClubPage from "./pages/ClubPage";
 import EachEventPage from "./pages/EventPage";
+import AnnouncementsPage from "./pages/AnnouncementsPage";
+
 const BASEURL = process.env.REACT_APP_BASEURL||"sports-board";
 
 function App() {
@@ -17,6 +19,7 @@ function App() {
           <Route path="/club/:name" element={<EachClubPage />} />
           <Route path="/events" element={<EachEventPage />} />
           <Route path="/event/:id" element={<EachEventPage />} />
+          <Route path="/announcements" element={<AnnouncementsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
