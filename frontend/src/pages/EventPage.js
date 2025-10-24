@@ -3,9 +3,6 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { FaRegFilePdf } from "react-icons/fa6";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-
 import groupImg from "../assets/group.jpeg";
 import { useEventPageData } from "../hooks/useEventPageData";
 
@@ -19,12 +16,11 @@ const clubData = {
 function EachEventPage() {
   const { data, error } = useEventPageData();
   console.log("AllEventsPage data", data);
-  const events = data?.events || []; 
-  const imgdata = data?.homepage[0]?.eventimgurl || []; 
+  const events = data?.events || [];
+  const imgdata = data?.homepage[0]?.eventimgurl || [];
   const clubName = data?.homepage[0]?.boardname || [];
   return (
     <div>
-      <Header />
       <div className="overflow-hidden font-poppins flex flex-col">
         <div
           className="w-full h-[865px] bg-top bg-cover bg-no-repeat flex flex-col items-center justify-center gap-5 text-gray-200"
@@ -44,7 +40,6 @@ function EachEventPage() {
           </RoundedDiv>
         ))}
       </div>
-      <Footer />
     </div>
   );
 }
@@ -76,7 +71,7 @@ const EventSection = ({ data }) => {
         </h1>
         <p className="text-[2.25vw] md:text-[1.25vw] leading-relaxed text-[#565656] font-[Familjen Grotesk] list-disc">
           {data?.eventActivityDesc}
-        </p> 
+        </p>
         {data?.eventPdf && (
           <a
             href={data.eventPdf}

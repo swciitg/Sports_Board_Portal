@@ -1,13 +1,18 @@
 import useRoundedStyle from "../hooks/useRoundedStyle";
 import { useHomePageData } from "../hooks/useHomePageData";
+import { Loader } from './index';
 
 function HeroSection() {
   const roundedStyle = useRoundedStyle();
-  const { data, error } = useHomePageData();
+  const { data, error, loading } = useHomePageData();
 // console.log("data", data);
 
   // if (loading) return <div>Loading...</div>; // Display loading state
   // if (error) return <div>Error fetching homepage data.</div>; // Handle errors
+
+  if (loading) {
+    return <Loader isOpen={true} message="Loading Homepage..." />
+  }
 
   const teamMember = data ? data.teamMember : [];
 

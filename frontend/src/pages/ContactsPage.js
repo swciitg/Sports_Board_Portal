@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import RoundedDiv from "../components/RoundedDiv";
 import { FaPhone } from "react-icons/fa6";
 import { MdMail } from "react-icons/md";
 import { IoLogoLinkedin } from "react-icons/io5";
 import axios from "axios"; // To make API calls
 import { useHomePageData } from "../hooks/useHomePageData";
+import { Loader, RoundedDiv } from "../components";
 
 function ContactsPage() {
   const [contacts, setContacts] = useState([]);
@@ -30,12 +28,9 @@ function ContactsPage() {
     fetchContacts();
   }, []);
 
-  if (loading)
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-center text-lg">Loading contacts...</p>
-      </div>
-    );
+  if (loading) {
+      return <Loader isOpen={true} message="Loading Contacts..." />
+  }
 
   if (error)
     return (
@@ -46,7 +41,6 @@ function ContactsPage() {
 
   return (
     <div className="min-h-screen">
-      <Header />
       <div className="overflow-hidden font-poppins flex flex-col">
         {/* Hero Section */}
         <div
@@ -140,7 +134,6 @@ function ContactsPage() {
           />
         ))}
       </div>
-      <Footer />
     </div>
   );
 }
