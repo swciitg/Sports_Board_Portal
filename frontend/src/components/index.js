@@ -1,14 +1,12 @@
-import AlertCard from './AlertCard';
-import AllClubsHeroSection from './AllClubsHeroSection';
-import ClubCard from './ClubCard';
-import Errors from './Errors';
-import Event from './Event';
-import Footer from './Footer';
-import Header from './Header';
-import HeroSection from './HeroSection';
-import Layout from './Layout';
-import Loader from './Loader';
-import RoundedDiv from './RoundedDiv';
-import ZigZagLine from './ZigZagLine';
-
-export {AlertCard, AllClubsHeroSection, ClubCard, Errors, Event, Footer, Header, HeroSection, Layout, Loader, RoundedDiv, ZigZagLine};
+export { default as AlertCard } from './AlertCard';
+export { default as AllClubsHeroSection } from './AllClubsHeroSection';
+export { default as ClubCard } from './ClubCard';
+export { default as Errors } from './Errors';
+export { default as Event } from './Event';
+export { default as Footer } from './Footer';
+export { default as Header } from './Header';
+export { default as HeroSection } from './HeroSection';
+export { default as Layout } from './Layout';
+export { default as Loader } from './Loader';
+export { default as RoundedDiv } from './RoundedDiv';
+export { default as ZigZagLine } from './ZigZagLine';
