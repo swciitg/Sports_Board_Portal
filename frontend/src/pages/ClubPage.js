@@ -5,7 +5,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Loader, RoundedDiv } from '../components';
+import { LuAlertCircle } from 'react-icons/lu';
+import { Loader, RoundedDiv, Errors } from '../components';
 
 function EachClubPage() {
   const scrollDirection = useScrollDirection();
@@ -31,7 +32,22 @@ function EachClubPage() {
   if (loading) {
       return <Loader isOpen={true} message={`Loading ${name} Club...`} />
   }
-  if (error) return <p>{error}</p>;
+   if (error) {
+      return (
+          <>
+          <div className="w-full flex flex-col justify-center items-center px-2 py-10 sm:px-5 md:px-10 lg:px-15 xl:px-22 space-y-6">
+            <LuAlertCircle className="w-16 h-16 text-red-500" />
+            <Errors 
+            status_code={error.status || 500}
+            title='Error Loading Clubs'
+            onClick={() => window.location.reload()}
+            message={error.message || 'Failed to load clubs data. Please try again later.'}
+            buttonText="Retry"
+            />
+          </div>
+          </>
+      );
+      }
 
   return (
     <div>

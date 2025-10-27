@@ -4,3 +4,4 @@ export { default as ClubPage } from './ClubPage';
 export { default as ContactsPage } from './ContactsPage';
 export { default as EventPage } from './EventPage';
 export { default as HomePage } from './HomePage';
+export { default as NotFoundPage } from './NotFoundPage';
