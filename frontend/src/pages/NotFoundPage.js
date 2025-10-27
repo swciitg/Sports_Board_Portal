@@ -1,4 +1,4 @@
-import { Errors, Container } from "../components";
+import { Errors } from "../components";
 import { useNavigate } from "react-router-dom";
 function NotFoundPage() {
     const navigate = useNavigate();
