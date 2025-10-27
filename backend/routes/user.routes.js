@@ -3,6 +3,7 @@ import { getHomePageData } from '../controllers/homePage.controller.js'; // Impo
 import { getAllClub, getClubById } from '../controllers/club.controller.js';
 import { getContacts } from '../controllers/contact.controller.js';
 import { getAll, getEventById } from '../controllers/event.controller.js';
+import { getAnnouncements } from '../controllers/announcement.controller.js';
 
 const router = express.Router();
 
@@ -16,5 +17,6 @@ router.get('/event:id', getEventById);
 router.get('/contacts', getContacts);
 router.get('/allClubs' , getAllClub);
 router.get('/allevents' , getAll);
+router.get('/announcements', getAnnouncements)
 
 export default router;
