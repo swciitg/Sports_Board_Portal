@@ -5,7 +5,8 @@ import {
   AllClubsPage,
   ClubPage,
   EventPage,
-  AnnouncementsPage,
+  AnnouncementsPage, 
+  NotFoundPage
 } from "./pages";
 import Layout from "./components/Layout";
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="/events" element={<EventPage />} />
           <Route path="/event/:id" element={<EventPage />} />
           <Route path="/announcements" element={<AnnouncementsPage />} />
+          <Route path="*" element={<NotFoundPage/>} />
         </Route>
       </Routes>
     </BrowserRouter>
