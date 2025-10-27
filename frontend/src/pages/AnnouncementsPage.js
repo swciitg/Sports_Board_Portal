@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { LuAlertCircle } from 'react-icons/lu';
 import { useAnnouncementsPageData } from '../hooks/useAnnouncementsPageData';
-import { Loader, AlertCard } from '../components';
+import { Loader, AlertCard, Errors } from '../components';
 
 const AnnouncementsPage = () => {
   const { data, error, loading } = useAnnouncementsPageData();
@@ -33,34 +33,30 @@ const AnnouncementsPage = () => {
     if (loading) {
       return <Loader isOpen={true} message="Loading announcements..." />
     }
-
   // Error state
   if (error) {
     return (
         <>
-        <div className="text-center max-w-md mx-auto p-6">
-            <LuAlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Error Loading Announcements</h2>
-            <p className="text-gray-600 mb-4">
-            {error.message || 'Failed to load announcements. Please try again later.'}
-            </p>
-            <button type="button"
-            onClick={() => window.location.reload()}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-            Retry
-            </button>
+        <div className="w-full flex flex-col justify-center items-center px-2 py-10 sm:px-5 md:px-10 lg:px-15 xl:px-22 space-y-6">
+           <LuAlertCircle className="w-16 h-16 text-red-500" />
+          <Errors 
+          status_code={error.status ||500}
+          title='Error Loading Announcements'
+          onClick={() => window.location.reload()}
+          message={error.message || 'Failed to load announcements. Please try again later.'}
+          buttonText="Retry"
+          />
         </div>
         </>
     );
     }
 
   // Handle both single announcement and array of announcements
-  const announcements = Array.isArray(data) ? data : [data];
+  const announcements = Array.isArray(data.announcements) ? data.announcements : [data.announcements];
 
   return (
    <>
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-8 lg:px-16">
+    <div className="w-full bg-gray-50 py-8 px-4 sm:px-8 lg:px-16">
       <div className="mx-auto">
         {/* Header */}
         <motion.div

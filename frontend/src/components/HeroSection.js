@@ -1,6 +1,7 @@
 import useRoundedStyle from "../hooks/useRoundedStyle";
 import { useHomePageData } from "../hooks/useHomePageData";
-import { Loader } from './index';
+import { Errors, Loader } from './index';
+import { LuAlertCircle } from "react-icons/lu";
 
 function HeroSection() {
   const roundedStyle = useRoundedStyle();
@@ -13,6 +14,22 @@ function HeroSection() {
   if (loading) {
     return <Loader isOpen={true} message="Loading Homepage..." />
   }
+  if (error) {
+    return (
+        <>
+        <div className="w-full flex flex-col justify-center items-center px-2 py-10 sm:px-5 md:px-10 lg:px-15 xl:px-22 space-y-6">
+           <LuAlertCircle className="w-16 h-16 text-red-500" />
+          <Errors
+          status_code={error.status ||500}
+          title='Error Loading Homepage'
+          onClick={() => window.location.reload()}
+          message={error.message || 'Failed to load landing page. Please try again later.'}
+          buttonText="Retry"
+          />
+        </div>
+        </>
+    );
+    }
 
   const teamMember = data ? data.teamMember : [];
 
