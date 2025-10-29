@@ -115,14 +115,14 @@ function HeroSection() {
       </div>
       {/* {Last div} */}
       <div
-        className="top-[-25rem] space-y-8 pb-[83vw] xs:pb-[60vw] sm:pb-[40vw] md:pb-[15vw] lg:pb-[13vw] hidden md:block"
+        className="top-[-25rem] space-y-8 pb-[83vw] xs:pb-[60vw] sm:pb-[40vw] md:pb-[15vw] lg:pb-[13vw] block"
         style={roundedStyle}
       >
         {/* Section 1 - Chairman */}
-        <div className="mt-[10rem] w-full flex flex-col md:flex-row md:justify-between md:items-start px-10 md:px-20 md:py-20 relative">
-          {/* Background div behind the image */}
+        <div className="mt-[6rem] md:mt-[10rem] w-full flex flex-col md:flex-row md:justify-between md:items-start px-6 sm:px-8 md:px-20 md:py-20 relative gap-8">
+          {/* Background div behind the image (hidden on small) */}
           <div
-            className="absolute bg-[#7BB9C4]"
+            className="absolute bg-[#7BB9C4] hidden md:block"
             style={{
               width: "455px",
               height: "602px",
@@ -132,59 +132,59 @@ function HeroSection() {
           />
 
           {/* Image Section */}
-          <div className="z-10 w-full md:w-[50%] flex items-center justify-center">
+          <div className="z-10 w-full md:w-1/2 flex items-center justify-center">
             <img
               src={data?.homepage[0]?.chairmanimgurl}
               alt="Chairman"
-              className="w-[461px] h-[438px] object-cover"
+              className="w-full h-auto max-w-[520px] sm:max-w-[560px] object-cover rounded-lg shadow-md"
             />
           </div>
 
           {/* Text Section */}
-          <div className="w-full md:w-[50%] text-center md:text-left flex flex-col items-center md:items-start justify-start space-y-1">
+          <div className="w-full md:w-1/2 text-center md:text-left flex flex-col items-center md:items-start justify-start space-y-2">
             {/* Title */}
-            <h1 className="text-[6vw] leading-none font-semibold text-[#0C0D0D] font-[Fira Sans Extra Condensed]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight font-semibold text-[#0C0D0D] font-[Fira Sans Extra Condensed]">
               CHAIRMAN<span className="text-[#7BB9C4]">.</span>
             </h1>
-            <p className="text-[3vw] md:text-[2vw] leading-relaxed text-[#565656] font-[Familjen Grotesk]">
+            <p className="text-base sm:text-lg md:text-xl leading-relaxed text-[#565656] font-[Familjen Grotesk]">
               {data?.homepage[0]?.chairmanname}
             </p>
-            <p className="text-[3vw] md:text-[2vw] leading-relaxed text-[#565656] font-[Familjen Grotesk]">
+            <p className="text-base sm:text-lg md:text-xl leading-relaxed text-[#565656] font-[Familjen Grotesk]">
               {data?.homepage[0]?.chairmandescription}
             </p>
-            <h2 className="text-[4vw] leading-none font-semibold text-[#565656] font-[Familjen Grotesk] mt-4">
+            <h2 className="text-xl sm:text-2xl md:text-3xl leading-snug font-semibold text-[#565656] font-[Familjen Grotesk] mt-4">
               Message from the Chairman-
             </h2>
-            <p className="text-[3vw] md:text-[2vw] leading-relaxed text-[#565656] font-[Familjen Grotesk]">
+            <p className="text-base sm:text-lg md:text-xl leading-relaxed text-[#565656] font-[Familjen Grotesk]">
               {data?.homepage[0]?.aboutchairman}
             </p>
           </div>
         </div>
 
-        <div className="w-full flex flex-col md:flex-row md:justify-between md:items-start px-10 md:px-20 md:py-20 relative">
+        <div className="w-full flex flex-col md:flex-row md:justify-between md:items-start px-6 sm:px-8 md:px-20 md:py-20 relative gap-8">
           {/* Text Section */}
-          <div className="w-full md:w-[50%] text-center md:text-left flex flex-col items-center md:items-start justify-start space-y-1">
+          <div className="w-full md:w-1/2 text-center md:text-left flex flex-col items-center md:items-start justify-start space-y-2 order-2 md:order-1">
             {/* Title */}
-            <h1 className="text-[6vw] leading-none font-semibold text-[#0C0D0D] font-[Fira Sans Extra Condensed]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight font-semibold text-[#0C0D0D] font-[Fira Sans Extra Condensed]">
               GENERAL SECRETARY<span className="text-[#7BB9C4]">.</span>
             </h1>
-            <p className="text-[3vw] md:text-[2vw] leading-relaxed text-[#565656] font-[Familjen Grotesk]">
+            <p className="text-base sm:text-lg md:text-xl leading-relaxed text-[#565656] font-[Familjen Grotesk]">
               {data?.homepage[0]?.gensecname}
             </p>
-            <p className="text-[3vw] md:text-[2vw] leading-relaxed text-[#565656] font-[Familjen Grotesk]">
+            <p className="text-base sm:text-lg md:text-xl leading-relaxed text-[#565656] font-[Familjen Grotesk]">
               {data?.homepage[0]?.gensecdescription}
             </p>
-            <h2 className="text-[4vw] leading-none font-semibold text-[#565656] font-[Familjen Grotesk] mt-4">
-              Message from the Chairman-
+            <h2 className="text-xl sm:text-2xl md:text-3xl leading-snug font-semibold text-[#565656] font-[Familjen Grotesk] mt-4">
+              Message from the General Secretary-
             </h2>
-            <p className="text-[3vw] md:text-[2vw] leading-relaxed text-[#565656] font-[Familjen Grotesk]">
+            <p className="text-base sm:text-lg md:text-xl leading-relaxed text-[#565656] font-[Familjen Grotesk]">
               {data?.homepage[0]?.aboutgensec}
             </p>
           </div>
 
-          {/* Background div behind the image */}
+          {/* Background div behind the image (hidden on small) */}
           <div
-            className="absolute bg-[#7BB9C4]"
+            className="absolute bg-[#7BB9C4] hidden md:block"
             style={{
               width: "455px",
               height: "602px",
@@ -194,11 +194,11 @@ function HeroSection() {
           />
 
           {/* Image Section */}
-          <div className="z-10 w-full md:w-[50%] flex items-center justify-center">
+          <div className="z-10 w-full md:w-1/2 flex items-center justify-center order-1 md:order-2">
             <img
               src={data?.homepage[0]?.gensecimg}
-              alt="Chairman"
-              className="w-[461px] h-[438px] object-cover"
+              alt="General Secretary"
+              className="w-full h-auto max-w-[520px] sm:max-w-[560px] object-cover rounded-lg shadow-md"
             />
           </div>
         </div>
