@@ -1,16 +1,35 @@
-import { TbLoader2 } from "react-icons/tb";
+import Container from "./Container";
 
-function Loader({ isOpen, message = "Loading..." }) {
+/**
+ * Inline loading state: spinner + shimmer skeleton grid.
+ * The redesign is explicit that loading must not block the page behind a modal.
+ */
+export default function Loader({ isOpen = true, message = "Loading..." }) {
   if (!isOpen) return null;
 
   return (
-    <div className={`fixed inset-0 bg-stone-800/40 flex justify-center overflow-y-auto md:overflow-y-scroll items-center z-50 transition-opacity m-0 duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-        <div className={`bg-white p-8 rounded-md shadow-xl w-full max-h-[90vh] transform max-w-fit flex items-center gap-4 transition-all duration-500 ease-out origin-center md:overflow-scroll overflow-auto ${isOpen ? 'scale-100' : 'scale-80'}` }>
-            <TbLoader2 className="w-12 h-12 text-blue-600 animate-spin" />
-            <p className="text-lg font-medium text-gray-700">{message}</p>
+    <div className="w-full bg-white py-16">
+      <Container>
+        <div className="flex items-center gap-3 mb-7">
+          <span className="w-5 h-5 rounded-full border-2 border-line border-t-accent animate-spin inline-block" />
+          <span className="font-poppins text-[13px] font-medium text-muted">{message}</span>
         </div>
-    </div>    
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+          {[1, 2, 3, 4].map((k) => (
+            <div key={k} className="flex flex-col gap-3">
+              <div
+                className="aspect-[4/3] animate-shimmer"
+                style={{
+                  background: "linear-gradient(90deg,#EFEFEF 0px,#F7F7F7 120px,#EFEFEF 240px)",
+                  backgroundSize: "420px 100%",
+                }}
+              />
+              <div className="h-3.5 w-[70%] bg-[#EFEFEF]" />
+              <div className="h-2.5 w-[45%] bg-[#F2F2F2]" />
+            </div>
+          ))}
+        </div>
+      </Container>
+    </div>
   );
 }
-
-export default Loader;

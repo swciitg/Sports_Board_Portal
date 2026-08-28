@@ -1,97 +1,83 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import ScrollAnimation from "react-animate-on-scroll";
-import clubImg from "../assets/images/clubs/wide.png";
-
-import Loader from "./Loader";
+import { useAllClubsData } from "../hooks/useAllClubsData";
+import Container from "./Container";
+import Reveal from "./Reveal";
+import SectionHeading from "./SectionHeading";
 import ClubCard from "./ClubCard";
-import RoundedDiv from "./RoundedDiv";
-import ZigZagLine from "./ZigZagLine";
+import Loader from "./Loader";
 import Errors from "./Errors";
-import { LuCircleAlert } from "react-icons/lu";
 
 function AllClubsHeroSection() {
-  const BACKEND_BASE_URL=process.env.BACKEND_BASE_URL;
-  const [clubsData, setClubsData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [heroimg , setheroimg] = useState(null)
-  useEffect(() => {
-    console.log(process.env.REACT_APP_API_BASE_URL)
-    axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/allclubs`) // Replace with your actual API route
-      .then((response) => {
-        setClubsData(response.data.club);
-        setheroimg(response.data.homepage[0].clubheroimg) // Ensure API response structure matches expected format
-        setLoading(false);
-        console.log(response.data.club);
-      })
-      .catch((error) => {
-        console.error("Error fetching clubs data:", error);
-        setError("Failed to load clubs.");
-        setLoading(false);
-      });
-  }, []);
+  const { data, error, loading } = useAllClubsData();
 
-  if (loading) {
-        return <Loader isOpen={true} message="Loading Clubs Data..." />
-    }
+  if (loading) return <Loader isOpen message="Loading clubs…" />;
 
-  if (error) {
+  if (error)
     return (
-        <>
-        <div className="w-full flex flex-col justify-center items-center px-2 py-10 sm:px-5 md:px-10 lg:px-15 xl:px-22 space-y-6">
-           <LuCircleAlert className="w-16 h-16 text-red-500" />
-          <Errors 
-          status_code={error.status ||500}
-          title='Error Loading ALL Clubs'
-          onClick={() => window.location.reload()}
-          message={error.message || 'Failed to load all clubs data. Please try again later.'}
-          buttonText="Retry"
-          />
-        </div>
-        </>
+      <Errors
+        status_code={error.status || 500}
+        title="Couldn't load the clubs"
+        message="The server didn't respond. Nothing is lost — try again in a moment."
+        buttonText="Retry"
+        onClick={() => window.location.reload()}
+      />
     );
-    }
-  return (
-    <div className="overflow-x-hidden font-poppins flex flex-col text-gray-200 bg-[#F5F5F5]">
-      <div
-        className="w-full h-[865px] bg-top bg-cover bg-no-repeat flex flex-col items-center justify-center gap-5 text-gray-200 z-1"
-        style={{ backgroundImage:`url(${heroimg})`}}
-      >
-        <p className="text-4xl md:text-7xl font-semibold tracking-tight text-center">
-          LOREM IPSUM
-        </p>
-        <p className="text-sm sm:text-base md:text-lg tracking-tight text-center">
-          Empowering athletes something something content.
-        </p>
-      </div>
 
-      {loading ? (
-        <p className="text-center py-10 text-xl">Loading clubs...</p>
-      ) : error ? (
-        <p className="text-center py-10 text-red-500">{error}</p>
-      ) : (
-        <RoundedDiv
-          Element={() => (
-            <div className="flex flex-col relative items-center">
-              {clubsData.map((clubData, index) => (
-                <ScrollAnimation
-                  key={index}
-                  animateIn="fadeInUp"
-                  animateOut="fadeOutUp"
-                  className="z-[1000]"
-                >
-                  <ClubCard index={index} clubData={clubData} />
-                </ScrollAnimation>
-              ))}
-              <ZigZagLine />
-            </div>
-          )}
-          top="-100px"
-          bg="#F5F5F5"
+  const clubs = data?.club || [];
+  const heroImage = data?.homepage?.[0]?.clubheroimg || "";
+
+  return (
+    <div className="w-full">
+      <section
+        className="relative min-h-[380px] md:min-h-[460px] flex items-end overflow-hidden bg-slate bg-cover bg-top bg-no-repeat"
+        style={heroImage ? { backgroundImage: `url(${heroImage})` } : undefined}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(12,13,13,.18) 0%, rgba(12,13,13,.42) 45%, rgba(12,13,13,.85) 100%)",
+          }}
         />
-      )}
+        <Container className="relative pb-14 pt-28">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="block w-[34px] h-0.5 bg-accent" />
+            <span className="font-poppins text-[11px] font-semibold tracking-[0.22em] uppercase text-accent-pale">
+              The clubs
+            </span>
+          </div>
+          <h1 className="font-display font-bold text-[clamp(44px,6.6vw,104px)] leading-[0.9] m-0 uppercase text-white">
+            Pick your sport
+          </h1>
+          <p className="max-w-[52ch] mt-[18px] mb-0 text-[17px] leading-[1.6] text-white/80">
+            Every sport on campus has a club behind it, and most of them take you in with no prior
+            experience. Trials open each semester.
+          </p>
+        </Container>
+      </section>
+
+      <section className="bg-surface py-16 md:py-24">
+        <Container>
+          <Reveal className="pb-9 border-b border-[#DEDEDE]">
+            <SectionHeading
+              eyebrow={`${clubs.length} clubs`}
+              title="All clubs"
+              size="text-[clamp(44px,4.8vw,72px)]"
+            />
+          </Reveal>
+
+          {clubs.length ? (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mt-9">
+              {clubs.map((club, i) => (
+                <Reveal key={club._id || club.name} delay={(i % 4) * 0.06}>
+                  <ClubCard index={i} clubData={club} />
+                </Reveal>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-9 text-muted">No clubs have been published yet.</p>
+          )}
+        </Container>
+      </section>
     </div>
   );
 }

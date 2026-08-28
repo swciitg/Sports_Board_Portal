@@ -1,36 +1,37 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { LuArrowUpRight } from "react-icons/lu";
+import { clubSlug } from "../hooks/useAllClubsData";
 
-function ClubCard({ index, clubData }) {
-  const navigate = useNavigate();
-  const handleNavigate = () => {
-    const urlSafeName = clubData.name.replace(/\s+/g, "-").toLowerCase();
-    navigate(`/club/${urlSafeName}`); 
-  };
+/**
+ * Club card: numbered 4:3 image plate with the club name below.
+ * Used by the homepage clubs grid and the all-clubs page.
+ */
+export default function ClubCard({ index = 0, clubData }) {
+  const num = String(index + 1).padStart(2, "0");
 
   return (
-    <div
-      className={`relative my-[2vw] md:-my-[3vw] w-fit cursor-pointer ${
-        index % 2 === 0
-          ? "right-[15vw] md:right-[25vw]"
-          : "left-[15vw] md:left-[25vw]"
-      }`}
-      onClick={handleNavigate}
+    <Link
+      to={`/club/${clubSlug(clubData)}`}
+      className="group block bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_34px_-18px_rgba(12,13,13,.35)]"
     >
-      <img
-        src={clubData.img}
-        alt="Club Image"
-        className="h-[40vw] md:h-[20vw]"
-      />
-      <p className="absolute top-1 left-2 font-semibold text-[2vw]">
-        {clubData.name}
-      </p>
-      <p className="absolute bottom-0 md:-bottom-2 right-2 font-semibold text-[4vw]">
-        {index < 9 ? `0${index + 1}` : index + 1}
-      </p>
-    </div>
+      <div className="relative aspect-[4/3] bg-surface overflow-hidden">
+        {clubData?.img && (
+          <img
+            src={clubData.img}
+            alt={clubData.name}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        )}
+        <span className="absolute top-2.5 left-2.5 px-1.5 py-0.5 bg-ink/70 font-display font-bold text-[15px] tracking-[0.06em] text-white">
+          {num}
+        </span>
+      </div>
+      <div className="px-4 pt-4 pb-[18px] flex items-center justify-between gap-2">
+        <span className="font-display font-semibold text-2xl tracking-[0.02em] uppercase text-ink">
+          {clubData?.name}
+        </span>
+        <LuArrowUpRight className="text-lg text-accent shrink-0" />
+      </div>
+    </Link>
   );
 }
-
-export default ClubCard;
- 

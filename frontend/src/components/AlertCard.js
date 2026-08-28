@@ -6,62 +6,41 @@ const AlertCard = ({ announcement, index = 0, variants }) => {
 
   return (
     <motion.div
-        key={announcement.id || index}
-        variants={variants}
-        layout
-        className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-200 group"
+      variants={variants}
+      layout
+      className="bg-white border border-line overflow-hidden transition-all duration-300 hover:border-accent hover:shadow-[0_18px_34px_-18px_rgba(12,13,13,.25)] group"
     >
       <div className="p-6 sm:p-8">
-        {/* Title */}
-        <motion.h2
-          className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200"
-          transition={{ duration: 0.2 }}
-        >
+        <h2 className="font-display font-bold text-[28px] sm:text-[32px] leading-[1.1] uppercase text-ink mb-3 transition-colors duration-200 group-hover:text-accent-deep">
           {title}
-        </motion.h2>
+        </h2>
 
-        {/* Date */}
-        <div className="flex items-center text-gray-500 mb-4">
+        <div className="flex items-center text-subtle mb-4">
           <LuCalendar className="w-4 h-4 mr-2" />
-          <span className="text-sm font-medium">
-            {new Date(date).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
+          <span className="font-poppins text-[11px] font-semibold tracking-[0.14em] uppercase">
+            {new Date(date).toLocaleDateString("en-GB", {
               weekday: "long",
+              day: "numeric",
+              month: "long",
+              year: "numeric",
             })}
           </span>
         </div>
 
-        {/* Description */}
-        <motion.p
-          className="text-gray-700 leading-relaxed mb-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 + index * 0.1 }}
-        >
+        <p className="text-[17px] leading-[1.75] text-muted mb-4 whitespace-pre-line">
           {description}
-        </motion.p>
+        </p>
 
-        {/* Optional Link */}
         {link && (
-          <motion.div
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 + index * 0.1 }}
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-poppins text-[13px] font-semibold tracking-[0.04em] text-ink inline-flex items-center gap-2.5 pb-1.5 border-b border-ink transition-all duration-200 hover:gap-4 hover:text-accent-deep hover:border-accent-deep"
           >
-            <a
-              href={link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center text-blue-600 font-medium hover:text-blue-700 transition-colors duration-200 group/link"
-            >
-              <span className="mr-2">Learn more</span>
-              <div className="flex items-center">
-                <LuArrowRight className="w-4 h-4 transform group-hover/link:translate-x-1 transition-transform duration-200" />
-              </div>
-            </a>
-          </motion.div>
+            Learn more
+            <LuArrowRight className="w-4 h-4" />
+          </a>
         )}
       </div>
     </motion.div>

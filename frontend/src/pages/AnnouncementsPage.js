@@ -1,108 +1,89 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { LuCircleAlert } from 'react-icons/lu';
-import { useAnnouncementsPageData } from '../hooks/useAnnouncementsPageData';
-import { Loader, AlertCard, Errors } from '../components';
+import { motion, AnimatePresence } from "framer-motion";
+import { useAnnouncementsPageData } from "../hooks/useAnnouncementsPageData";
+import { Loader, AlertCard, Errors } from "../components";
+import Container from "../components/Container";
+import SectionHeading from "../components/SectionHeading";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
 
 const AnnouncementsPage = () => {
   const { data, error, loading } = useAnnouncementsPageData();
 
-  // Animation variants
-    const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-        staggerChildren: 0.1
-        }
-    }
-    };
+  if (loading) return <Loader isOpen message="Loading announcements…" />;
 
-    const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-        y: 0,
-        opacity: 1,
-        transition: {
-        duration: 0.5,
-        ease: "easeOut"
-        }
-    }
-    };
-
-  
-    if (loading) {
-      return <Loader isOpen={true} message="Loading announcements..." />
-    }
-  // Error state
-  if (error) {
+  if (error)
     return (
-        <>
-        <div className="w-full flex flex-col justify-center items-center px-2 py-10 sm:px-5 md:px-10 lg:px-15 xl:px-22 space-y-6">
-           <LuCircleAlert className="w-16 h-16 text-red-500" />
-          <Errors 
-          status_code={error.status ||500}
-          title='Error Loading Announcements'
-          onClick={() => window.location.reload()}
-          message={error.message || 'Failed to load announcements. Please try again later.'}
-          buttonText="Retry"
-          />
-        </div>
-        </>
+      <Errors
+        status_code={error.status || 500}
+        title="Couldn't load announcements"
+        message={error.message || "The server didn't respond. Try again in a moment."}
+        buttonText="Retry"
+        onClick={() => window.location.reload()}
+      />
     );
-    }
 
-  // Handle both single announcement and array of announcements
-  const announcements = Array.isArray(data.announcements) ? data.announcements : [data.announcements];
+  // The endpoint returns an array; guard against a single object just in case.
+  const announcements = Array.isArray(data.announcements)
+    ? data.announcements
+    : [data.announcements].filter(Boolean);
 
   return (
-   <>
-    <div className="w-full bg-gray-50 py-8 px-4 sm:px-8 lg:px-16">
-      <div className="mx-auto">
-        {/* Header */}
+    <div className="w-full bg-white py-16 md:py-24">
+      <Container>
         <motion.div
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            className="text-start mb-12"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          className="pb-8 border-b border-line mb-10"
         >
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Announcements
-            </h1>
-            <p className="text-xl text-gray-600">
-            Stay updated with the latest news and important information
-            </p>
+          <SectionHeading
+            eyebrow="Notice board"
+            title="Announcements"
+            size="text-[clamp(44px,4.8vw,72px)]"
+          />
+          <p className="mt-4 mb-0 text-[17px] text-muted max-w-[52ch]">
+            Stay updated with the latest news and important information.
+          </p>
         </motion.div>
 
-        {/* Announcements List */}
         {announcements.length === 0 ? (
-            <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-12"
-            >
-            <p className="text-gray-500 text-lg">No announcements available at the moment.</p>
-            </motion.div>
+          <p className="text-muted">No announcements available at the moment.</p>
         ) : (
-            <motion.div
+          <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="space-y-6"
-            >
+            className="flex flex-col gap-6"
+          >
             <AnimatePresence>
-                {announcements.map((announcement, index) => (
+              {announcements.map((announcement, index) => (
                 <AlertCard
-                    announcement={announcement}
-                    index={index}
-                    variants={itemVariants}
+                  key={`${announcement.title}-${announcement.date}`}
+                  announcement={announcement}
+                  index={index}
+                  variants={itemVariants}
                 />
-                ))}
+              ))}
             </AnimatePresence>
-            </motion.div>
+          </motion.div>
         )}
-      </div>
+      </Container>
     </div>
-   </>
   );
 };
 

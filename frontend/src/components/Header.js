@@ -1,92 +1,117 @@
 import React, { useState } from "react";
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink } from "react-router-dom";
 import { IoMenu } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import sbLogo from "../assets/sports_board_logo.jpg";
-import { useHomePageData } from "../hooks/useHomePageData";
+
+const navItems = [
+  { name: "Home", slug: "/" },
+  { name: "Clubs", slug: "/clubs" },
+  { name: "Events", slug: "/events" },
+  { name: "Announcements", slug: "/announcements" },
+  { name: "Contacts", slug: "/contacts" },
+];
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { data, error } = useHomePageData();
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-   const navItems = [
-    { name: 'Home', slug: "/"},
-    { name: "Clubs", slug: "/clubs"},
-    { name: "Events", slug: "/events"},
-    { name: "Announcements", slug: "/announcements" },
-    { name: "Contacts", slug: "/contacts"},
-  ];
-// console.log("data", data);
-  return (
-    <>
-    <header className="shadow-lg sticky top-0 z-50 bg-white">
-      <div className="w-full mx-auto p-2 md:py-2 md:px-6">
-        <nav className="flex items-center justify-between px-4 py-1 sm:px-6 lg:px-8">
-          {/* Logo */}
-          <div className="mr-4 gap-2 flex items-center">
-            <Link to="/">
-              <img
-                src={sbLogo}
-                alt="Sports Board IIT Guwahati"
-                className="w-[44px] h-[48px] md:w-[56px] md:h-[60px] object-contain"
-            />
-            </Link>
-            <span className="flex flex-col leading-tight">
-              <span className="font-bold text-md lg:text-xl text-gray-900 tracking-wide font-['Fira_Sans_Extra_Condensed']">SPORTS BOARD</span>
-              <span className="font-medium text-xs lg:text-sm text-gray-500 tracking-wide font-['Familjen_Grotesk']">IIT Guwahati</span>
-            </span>
-          </div>
-          <ul className="hidden lg:flex items-center ml-auto space-x-4 text-md">
-            {navItems.map((item) =>
-              (
-                <li key={item.name}>
-                  <NavLink
-                    to={item.slug}
-                    className={({ isActive }) =>
-                      `inline-block px-4 py-2 duration-300 rounded-full font-medium transition-all text-center
-                      ${isActive ? "text-blue-700 bg-blue-50" : "text-gray-600 hover:text-blue-800 hover:bg-gray-50"}`
-                    }
-                  >
-                    {item.name}
-                  </NavLink>
-                </li>
-              ) 
-            )}
-          </ul>
+  const toggleMenu = () => setIsMenuOpen((open) => !open);
 
-          {/* Hamburger Menu Button (Visible on mobile) */}
-          <div className="lg:hidden flex">
-            <button onClick={toggleMenu}>
-              {isMenuOpen ? <RxCross2 size={24} /> : <IoMenu size={24} />}
-            </button>
+  return (
+    <header className="sticky top-0 z-50 bg-white/[.92] backdrop-blur-xl backdrop-saturate-150 border-b border-line">
+      <div className="w-full max-w-container mx-auto px-6 md:px-10 box-border">
+        <nav className="h-[76px] flex items-center justify-between gap-6">
+          {/* Brand */}
+          <Link to="/" className="flex items-center gap-3">
+            <img
+              src={sbLogo}
+              alt="Sports Board IIT Guwahati"
+              className="w-[40px] h-[44px] md:w-[46px] md:h-[50px] object-contain"
+            />
+            <span className="flex flex-col leading-[1.05]">
+              <span className="font-display font-bold text-lg md:text-[22px] tracking-[0.04em] text-ink">
+                SPORTS BOARD
+              </span>
+              <span className="font-poppins font-medium text-[10px] md:text-[11px] tracking-[0.16em] uppercase text-subtle">
+                IIT Guwahati
+              </span>
+            </span>
+          </Link>
+
+          {/* Desktop nav */}
+          <div className="hidden lg:flex items-center gap-1 font-poppins text-sm font-medium">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.name}
+                to={item.slug}
+                end={item.slug === "/"}
+                className={({ isActive }) =>
+                  `px-4 py-2.5 rounded-full transition-all duration-200 ${
+                    isActive
+                      ? "text-ink bg-accent-soft"
+                      : "text-muted hover:text-ink hover:bg-[#F2F2F2]"
+                  }`
+                }
+              >
+                {item.name}
+              </NavLink>
+            ))}
+            <Link
+              to="/contacts"
+              className="ml-3 px-[18px] py-2.5 rounded-full bg-ink text-white font-semibold transition-all duration-200 hover:bg-accent-deep"
+            >
+              Join a club
+            </Link>
           </div>
+
+          {/* Hamburger */}
+          <button
+            onClick={toggleMenu}
+            className="lg:hidden text-ink"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
+          >
+            {isMenuOpen ? <RxCross2 size={24} /> : <IoMenu size={24} />}
+          </button>
         </nav>
-        {/* Mobile Menu (Dropdown) */}
-        
-          <div className={`lg:hidden transition-all duration-300 ease-in-out overflow-hidden ${isMenuOpen ? 'max-h-screen' : 'max-h-0'}`}>
-            <ul className="flex flex-col items-start justify-center space-y-3  sm:space-y-4 pt-4 text-sm sm:text-base">
-              {navItems.map((item) =>
-                  (<li className='m-0 w-full' key={item.name}>
-                    <NavLink
-                      to={item.slug}
-                      onClick={toggleMenu} 
-                      className={({ isActive }) =>
-                        `inline-block px-4 py-2 duration-200 rounded-lg font-medium w-full text-center
-                        ${isActive ? "text-blue-700 bg-blue-50" : "text-gray-700 bg-gray-100 hover:text-blue-700"}`
-                      }
-                    >
-                      {item.name}
-                    </NavLink>
-                  </li>)
-              )}
-              
-            </ul>
-          </div>
+
+        {/* Mobile menu */}
+        <div
+          className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+            isMenuOpen ? "max-h-screen pb-4" : "max-h-0"
+          }`}
+        >
+          <ul className="flex flex-col gap-2 pt-2 font-poppins text-sm font-medium">
+            {navItems.map((item) => (
+              <li key={item.name}>
+                <NavLink
+                  to={item.slug}
+                  end={item.slug === "/"}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={({ isActive }) =>
+                    `block w-full px-4 py-3 transition-colors duration-200 ${
+                      isActive
+                        ? "text-ink bg-accent-soft"
+                        : "text-muted bg-surface hover:text-ink"
+                    }`
+                  }
+                >
+                  {item.name}
+                </NavLink>
+              </li>
+            ))}
+            <li>
+              <Link
+                to="/contacts"
+                onClick={() => setIsMenuOpen(false)}
+                className="block w-full px-4 py-3 bg-ink text-white font-semibold text-center"
+              >
+                Join a club
+              </Link>
+            </li>
+          </ul>
+        </div>
       </div>
     </header>
-    </>
   );
 }
 

@@ -9,18 +9,22 @@ export const useEventPageData = () => {
     homepage: [],
   });
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect( () => {
     const fetchData = async () => {
-      await axios.get(`${process.env.REACT_APP_API_BASE_URL}/allevents`)
-      .then((response) => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/allevents`);
         setData(response.data);
-      })
-      .catch((err) => {
+        setError(null);
+      } catch (err) {
         setError(err);
-      });
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
   }, []);
-  return { data, error };
+  return { data, error, loading };
 };
