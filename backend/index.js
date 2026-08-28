@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import router from "./routes/user.routes.js";
-import { admin,adminRouter } from "./admin_panel/admin-config.js"; // Removed unnecessary import
+import { admin, adminRouter, ADMIN_MOUNT_PATH } from "./admin_panel/admin-config.js"; // Removed unnecessary import
 import cors from "cors";
 import session from "express-session";
 import { fileURLToPath } from 'url';
@@ -12,11 +12,6 @@ import authRoutes from "./routes/auth.routes.js";
 // Initialize dotenv to load environment variables (quiet: suppress dotenv v17 startup tips)
 dotenv.config({ quiet: true });
 
-// The reverse proxy in front of this service strips the '/sports-board/api'
-// prefix before forwarding requests, so Express always sees unprefixed
-// paths (e.g. '/home', '/admin') in both dev and prod.
-const API_BASE = process.env.API_BASE || '';
-const ADMINPANELROOT = `${API_BASE}/admin`;
 const PORT = process.env.PORT || 8000;
 const url = process.env.MONGO_URI;
 console.log(url);
@@ -31,7 +26,7 @@ db.once("open", () => {
 });
 
 const app = express();
-app.use(ADMINPANELROOT, adminRouter);
+app.use(ADMIN_MOUNT_PATH, adminRouter);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.set('view engine', 'ejs');
