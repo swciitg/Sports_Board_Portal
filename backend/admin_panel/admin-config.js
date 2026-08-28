@@ -14,7 +14,10 @@ import clubMain from "../models/clubMain.js";
 import homepage from "../models/general.js";
 import announcement from "../models/announcement.js";
 
-const API_BASE = process.env.NODE_ENV === 'development' ?  (process.env.API_BASE || '') : '/sports-board/api';
+// The reverse proxy in front of this service strips the '/sports-board/api'
+// prefix before forwarding requests, so Express always sees unprefixed
+// paths (e.g. '/home', '/admin') in both dev and prod.
+const API_BASE = process.env.API_BASE || '';
 const ADMINPANELROOT = `${API_BASE}/admin`;
 
 const DEFAULT_ADMIN = {
