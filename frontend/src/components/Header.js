@@ -38,7 +38,7 @@ function Header() {
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden lg:flex items-center gap-1 font-poppins text-sm font-medium">
+          <div className="hidden lg:flex items-center gap-2 font-poppins text-sm font-medium">
             {navItems.map((item) => (
               <NavLink
                 key={item.name}
@@ -55,12 +55,6 @@ function Header() {
                 {item.name}
               </NavLink>
             ))}
-            <Link
-              to="/contacts"
-              className="ml-3 px-[18px] py-2.5 rounded-full bg-ink text-white font-semibold transition-all duration-200 hover:bg-accent-deep"
-            >
-              Join a club
-            </Link>
           </div>
 
           {/* Hamburger */}

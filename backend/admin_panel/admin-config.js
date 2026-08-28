@@ -58,7 +58,26 @@ const authenticate = async (email, password) => {
 };
 
 const adminOptions = {
-  resources: [AboutUs, Contacts, Event, Facilities, TeamMember,announcement, clubMain,homepage],
+  resources: [
+    AboutUs, Contacts, Event, Facilities, TeamMember, announcement, clubMain,
+    {
+      resource: homepage,
+      // The Leadership section's field names don't say what they hold — label
+      // and describe them so the chairman/GS fields aren't mistaken for missing.
+      options: {
+        properties: {
+          chairmanname: { label: 'Chairman Name' },
+          chairmanimgurl: { label: 'Chairman Image URL', description: 'Absolute URL to the chairman\'s photo.' },
+          chairmandescription: { label: 'Chairman Department', description: 'e.g. "Mechanical Engineering". Shown under the chairman\'s name.' },
+          aboutchairman: { label: 'Chairman Quote', description: 'Short pull-quote shown under "Message from the Chairman".' },
+          gensecname: { label: 'General Secretary Name' },
+          gensecimg: { label: 'General Secretary Image URL', description: 'Absolute URL to the general secretary\'s photo.' },
+          gensecdescription: { label: 'General Secretary Department', description: 'e.g. "Mechanical Engineering". Shown under the GS\'s name.' },
+          aboutgensec: { label: 'General Secretary Quote', description: 'Short pull-quote shown under "Message from the General Secretary".' },
+        },
+      },
+    },
+  ],
   rootPath: PUBLIC_ADMIN_ROOT,
   loginPath: PUBLIC_ADMIN_ROOT + "/login",
   logoutPath: PUBLIC_ADMIN_ROOT + "/logout",
