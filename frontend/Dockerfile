@@ -1,4 +1,4 @@
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -15,9 +15,3 @@ COPY . .
 
 # Create production build of React App
 RUN npm run build
-# RUN mkdir -p ./build/election_portal
-# RUN mv ./build/static ./build/election_portal/static
-# RUN mv ./build/manifest.json ./build/election_portal/manifest.json
-# RUN mv ./build/favicon.ico ./build/election_portal/favicon.ico
-# RUN mv ./build/asset-manifest.json ./build/election_portal/asset-manifest.json
-# RUN mv ./build/logo192.png ./build/election_portal/logo192.png

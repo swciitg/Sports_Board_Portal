@@ -4,7 +4,7 @@ import * as AdminJSMongoose from "@adminjs/mongoose";
 import mongoose from "mongoose";
 import express from "express";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ quiet: true });
 import AboutUs from "../models/aboutUs.js";
 import Contacts from "../models/contact.js";
 import Event from "../models/event.js";
