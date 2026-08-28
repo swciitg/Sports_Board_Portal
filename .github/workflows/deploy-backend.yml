@@ -1,7 +1,16 @@
 name: Backend Deploy
 
 on:
+  push:
+    branches: [main]  # Deploy on every commit to main
   workflow_dispatch:  # Manual trigger
+
+# Both deploys SSH into the same VM and share a checkout and the Docker
+# config, so never let them run at the same time. Queue instead of cancelling:
+# a half-finished deploy is worse than a slow one.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
 
 jobs:
   build-backend:
