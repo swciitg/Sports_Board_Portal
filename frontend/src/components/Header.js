@@ -22,18 +22,21 @@ function Header() {
   return (
     <>
     <header className="shadow-lg sticky top-0 z-50 bg-white">
-      <div className="w-full mx-auto p-2 md:py-4 md:px-6">
-        <nav className="flex items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
+      <div className="w-full mx-auto p-2 md:py-2 md:px-6">
+        <nav className="flex items-center justify-between px-4 py-1 sm:px-6 lg:px-8">
           {/* Logo */}
           <div className="mr-4 gap-2 flex items-center">
             <Link to="/">
-              <img 
+              <img
                 src={sbLogo}
-                alt="Sports Board IIT Guwahati" 
-                className="w-[61px] h-[66px] md:w-[86px] md:h-[92px] object-contain"
+                alt="Sports Board IIT Guwahati"
+                className="w-[44px] h-[48px] md:w-[56px] md:h-[60px] object-contain"
             />
             </Link>
-            <span className="font-bold text-md lg:text-xl text-gray-900 tracking-wide">SPORTS BOARD</span>
+            <span className="flex flex-col leading-tight">
+              <span className="font-bold text-md lg:text-xl text-gray-900 tracking-wide font-['Fira_Sans_Extra_Condensed']">SPORTS BOARD</span>
+              <span className="font-medium text-xs lg:text-sm text-gray-500 tracking-wide font-['Familjen_Grotesk']">IIT Guwahati</span>
+            </span>
           </div>
           <ul className="hidden lg:flex items-center ml-auto space-x-4 text-md">
             {navItems.map((item) =>
