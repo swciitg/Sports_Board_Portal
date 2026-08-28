@@ -19,7 +19,7 @@ function Footer() {
   return (
     <div className="w-full bg-gray-800 text-white font-poppins">
       <div className="flex justify-center px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <div className="flex flex-col sm:flex-row items-center sm:items-start justify-around gap-8 lg:gap-12 w-full">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-8 lg:gap-12 w-full max-w-7xl mx-auto">
           {/* Left Section - Logo and Contact Info */}
           <div className="flex flex-col lg:flex-row items-center sm:items-start gap-6 lg:gap-8">
             <div className="flex md:flex-row flex-col items-center sm:items-start gap-4 lg:gap-6">
