@@ -4,14 +4,13 @@ import mongoose from "mongoose";
 import router from "./routes/user.routes.js";
 import { admin,adminRouter } from "./admin_panel/admin-config.js"; // Removed unnecessary import
 import cors from "cors";
-import bodyParser from "body-parser"; // Explicitly import body-parser
 import session from "express-session";
 import { fileURLToPath } from 'url';
 import path from 'path';
 import uploadRoutes from "./routes/upload.route.js";
 import authRoutes from "./routes/auth.routes.js";
-// Initialize dotenv to load environment variables
-dotenv.config();
+// Initialize dotenv to load environment variables (quiet: suppress dotenv v17 startup tips)
+dotenv.config({ quiet: true });
 
 const API_BASE = process.env.NODE_ENV === 'development' ?  (process.env.API_BASE || '') : '/sports-board/api';
 const ADMINPANELROOT = `${API_BASE}/admin`;
@@ -50,14 +49,8 @@ app.use(session({
 // Apply CORS Middleware
 app.use(cors());
 
-// Use AdminJS first
-
-// Use body-parser after AdminJS router
-
-// Use express.json() and regular router
+// Body parsers (Express's built-in parsers replace the standalone body-parser package)
 app.use(express.json());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', router);
 app.use('/image', authRoutes);
 app.use('/upload', uploadRoutes);

@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { LuAlertCircle } from 'react-icons/lu';
+import { LuCircleAlert } from 'react-icons/lu';
 import { useAnnouncementsPageData } from '../hooks/useAnnouncementsPageData';
 import { Loader, AlertCard, Errors } from '../components';
 
@@ -38,7 +38,7 @@ const AnnouncementsPage = () => {
     return (
         <>
         <div className="w-full flex flex-col justify-center items-center px-2 py-10 sm:px-5 md:px-10 lg:px-15 xl:px-22 space-y-6">
-           <LuAlertCircle className="w-16 h-16 text-red-500" />
+           <LuCircleAlert className="w-16 h-16 text-red-500" />
           <Errors 
           status_code={error.status ||500}
           title='Error Loading Announcements'
