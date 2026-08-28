@@ -60,6 +60,11 @@ const homePageData = new mongoose.Schema({
   gensecdescription: {
     type: String,
     required: true,
+  },
+  // Homepage gallery rail. Optional so existing documents keep validating.
+  galleryImages: {
+    type: [String],
+    default: [],
   }
 });
 

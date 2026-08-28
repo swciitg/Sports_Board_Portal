@@ -4,7 +4,7 @@ import Homepage from "../models/general.js";
 export const getAllClub = async (req, res) => {
   // console.log("Fetching all clubs...");
   try {
-    const club = await clubMain.find({}, 'name img');
+    const club = await clubMain.find({}, 'name img safeName');
     const homepage = await Homepage.find({} , 'clubheroimg');
     // console.log(homepage);
     if (!club) {

@@ -1,26 +1,94 @@
 import React, { useEffect, useState } from "react";
-import { FaPhone } from "react-icons/fa6";
-import { MdMail } from "react-icons/md";
+import axios from "axios";
+import { LuMail, LuPhone, LuMapPin, LuArrowUpRight } from "react-icons/lu";
 import { IoLogoLinkedin } from "react-icons/io5";
-import axios from "axios"; // To make API calls
 import { useHomePageData } from "../hooks/useHomePageData";
-import { Loader, RoundedDiv } from "../components";
+import Container from "../components/Container";
+import Reveal from "../components/Reveal";
+import SectionHeading from "../components/SectionHeading";
+import Loader from "../components/Loader";
+import Errors from "../components/Errors";
+
+const BOARD_MAIL = "sportsec@iitg.ac.in";
+const BOARD_TEL = "+91-361-258162";
+
+const chip =
+  "font-poppins text-[13px] font-medium text-white bg-white/[.14] border border-white/[.28] px-[18px] py-[11px] inline-flex items-center gap-2.5 transition-colors hover:bg-white/[.24]";
+
+const iconButton =
+  "w-10 h-10 border border-[#D8D8D8] inline-flex items-center justify-center text-[17px] text-ink bg-white transition-all duration-200 hover:bg-ink hover:text-white hover:border-ink";
+
+function ContactCard({ contact }) {
+  const mail = contact?.socialLinks?.mailId;
+  const phone = contact?.socialLinks?.phoneNo;
+  const linkedin = contact?.socialLinks?.linkedin;
+
+  return (
+    <div className="bg-surface flex flex-col h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-22px_rgba(12,13,13,.4)]">
+      <div className="relative aspect-square bg-[#ECECEC] overflow-hidden">
+        {contact?.image && (
+          <img src={contact.image} alt={contact.name} className="w-full h-full object-cover" />
+        )}
+      </div>
+      <div className="px-6 pt-6 pb-[26px] flex flex-col gap-3.5 flex-grow">
+        <div className="flex-grow">
+          <span className="font-poppins text-[10px] font-semibold tracking-[0.18em] uppercase text-accent-deep">
+            {contact?.designation}
+          </span>
+          <div className="font-display font-bold text-[30px] md:text-[34px] leading-[1.05] uppercase mt-2 text-ink">
+            {contact?.name}
+          </div>
+          <div className="text-[15px] text-muted mt-1">{contact?.department}</div>
+        </div>
+        <div className="flex gap-2 pt-1">
+          {mail && (
+            <a href={`mailto:${mail}`} className={iconButton} aria-label="Email">
+              <LuMail />
+            </a>
+          )}
+          {phone && (
+            <a href={`tel:${phone}`} className={iconButton} aria-label="Phone">
+              <LuPhone />
+            </a>
+          )}
+          {linkedin && (
+            <a
+              href={linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={iconButton}
+              aria-label="LinkedIn"
+            >
+              <IoLogoLinkedin />
+            </a>
+          )}
+        </div>
+        {mail && (
+          <div className="font-mono text-[11px] text-subtle border-t border-[#E4E4E4] pt-3 break-all">
+            {mail}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function ContactsPage() {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { data } = useHomePageData();
-  const imgdata = data?.homepage[0]?.contactpageimgurl || "";
+  const heroImage = data?.homepage?.[0]?.contactpageimgurl || "";
 
   useEffect(() => {
     const fetchContacts = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/contacts`);
-        setContacts(response.data.contacts);
-        setLoading(false);
+        setContacts(response.data.contacts || []);
+        setError(null);
       } catch (err) {
-        setError("Failed to load contacts.");
+        setError(err);
+      } finally {
         setLoading(false);
       }
     };
@@ -28,112 +96,132 @@ function ContactsPage() {
     fetchContacts();
   }, []);
 
-  if (loading) {
-      return <Loader isOpen={true} message="Loading Contacts..." />
-  }
+  if (loading) return <Loader isOpen message="Loading contacts…" />;
 
   if (error)
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-center text-red-500 text-lg">{error}</p>
-      </div>
+      <Errors
+        status_code={error.status || 500}
+        title="Couldn't load contacts"
+        message="The server didn't respond. Nothing is lost — try again in a moment."
+        buttonText="Retry"
+        onClick={() => window.location.reload()}
+      />
     );
 
+  // A contact carrying a `club` is that club's secretary; the rest are core team.
+  const coreTeam = contacts.filter((c) => !c.club);
+  const secretaries = contacts.filter((c) => c.club);
+
   return (
-    <div className="min-h-screen">
-      <div className="overflow-hidden font-poppins flex flex-col">
-        {/* Hero Section */}
+    <div className="w-full">
+      {/* Hero */}
+      <section
+        className="relative min-h-[380px] md:min-h-[460px] flex items-end overflow-hidden bg-slate bg-cover bg-top bg-no-repeat"
+        style={heroImage ? { backgroundImage: `url(${heroImage})` } : undefined}
+      >
         <div
-          className="w-full h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh] xl:h-[865px] bg-center bg-cover bg-no-repeat flex flex-col items-center justify-center gap-3 sm:gap-4 md:gap-5 text-gray-200 px-4"
-          style={{ backgroundImage: `url(${imgdata})` }}
-        >
-          <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-center leading-tight">
-            GET IN TOUCH
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(12,13,13,.18) 0%, rgba(12,13,13,.42) 45%, rgba(12,13,13,.85) 100%)",
+          }}
+        />
+        <Container className="relative pb-14 pt-28">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="block w-[34px] h-0.5 bg-accent" />
+            <span className="font-poppins text-[11px] font-semibold tracking-[0.22em] uppercase text-accent-pale">
+              Contacts
+            </span>
+          </div>
+          <h1 className="font-display font-bold text-[clamp(44px,6.6vw,104px)] leading-[0.9] m-0 uppercase text-white">
+            Get in touch
+          </h1>
+          <p className="max-w-[50ch] mt-[18px] mb-[26px] text-[17px] leading-[1.6] text-white/80">
+            Queries about trials, equipment, tournaments or the Inter&#8209;IIT contingent — reach
+            the right person directly.
           </p>
-          <p className="text-xs sm:text-sm md:text-base lg:text-lg tracking-tight text-center max-w-2xl px-4">
-            In case you have any queries, don't hesitate to reach out to us.
-          </p>
-        </div>
+          <div className="flex gap-2.5 flex-wrap">
+            <a href={`mailto:${BOARD_MAIL}`} className={chip}>
+              <LuMail /> {BOARD_MAIL}
+            </a>
+            <a href="tel:+91361258162" className={chip}>
+              <LuPhone /> {BOARD_TEL}
+            </a>
+            <span className={chip}>
+              <LuMapPin /> Old SAC Building, IIT Guwahati
+            </span>
+          </div>
+        </Container>
+      </section>
 
-        {/* Contact Cards */}
-        {contacts?.map((contact, index) => (
-          <RoundedDiv
-            key={index}
-            Element={() => (
-              <div className="w-full flex flex-col-reverse lg:flex-row lg:justify-between lg:items-center gap-6 sm:gap-8 md:gap-10 lg:gap-12 px-4 sm:px-6 md:px-10 lg:px-16 xl:px-20 py-8 sm:py-10 md:py-12 lg:py-16 xl:py-20">
-                {/* Text Content */}
-                <div className="w-full lg:w-[50%] text-center lg:text-left flex flex-col items-center lg:items-start justify-center space-y-3 sm:space-y-4">
-                  {/* Designation */}
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-tight font-semibold text-[#0C0D0D] font-[Fira Sans Extra Condensed]">
-                    {contact.designation.toUpperCase()}
-                  </h1>
+      {/* Core team */}
+      <section className="bg-white py-16 md:py-24">
+        <Container>
+          <Reveal className="flex items-end justify-between gap-10 pb-8 border-b border-line flex-wrap">
+            <SectionHeading title="The core team" size="text-[clamp(44px,4.8vw,72px)]" />
+            <span className="font-poppins text-xs tracking-[0.14em] uppercase text-subtle pb-2">
+              2025–26 tenure
+            </span>
+          </Reveal>
 
-                  {/* Name and Department */}
-                  <div className="space-y-1">
-                    <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium text-[#565656] font-[Familjen Grotesk]">
-                      {contact.name}
-                    </p>
-                    <p className="text-sm sm:text-base md:text-lg lg:text-xl text-[#565656] font-[Familjen Grotesk]">
-                      {contact.department}
-                    </p>
+          {coreTeam.length ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mt-10">
+              {coreTeam.map((contact, i) => (
+                <Reveal key={contact._id || contact.name} delay={(i % 3) * 0.06}>
+                  <ContactCard contact={contact} />
+                </Reveal>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-10 text-muted">No contacts have been published yet.</p>
+          )}
+        </Container>
+      </section>
+
+      {/* Club secretaries */}
+      {secretaries.length > 0 && (
+        <section className="bg-surface py-16 md:py-24">
+          <Container>
+            <Reveal className="mb-9">
+              <SectionHeading
+                eyebrow="Club-wise"
+                title="Club secretaries"
+                size="text-[clamp(44px,4.8vw,72px)]"
+              />
+              <p className="mt-4 mb-0 text-base text-muted max-w-[52ch]">
+                For trials, practice timings and equipment, write to the secretary of the club you
+                are after.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.08} className="bg-white grid grid-cols-1 lg:grid-cols-2">
+              {secretaries.map((s) => (
+                <div
+                  key={s._id || `${s.club}-${s.name}`}
+                  className="grid grid-cols-[1fr_auto] items-center gap-4 px-6 py-5 border-b border-[#EDEDED] transition-colors hover:bg-[#F7FBFC]"
+                >
+                  <div className="flex flex-col gap-0.5">
+                    <span className="font-display font-semibold text-2xl tracking-[0.02em] uppercase text-ink">
+                      {s.club}
+                    </span>
+                    <span className="text-[13px] text-muted">
+                      {s.name}
+                      {s.department ? ` — ${s.department}` : ""}
+                    </span>
                   </div>
-
-                  {/* Description */}
-                  <p className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed text-[#565656] font-[Familjen Grotesk] max-w-xl">
-                    {contact.description}
-                  </p>
-
-                  {/* Social Links */}
-                  <div className="pt-4 sm:pt-6 flex gap-4 sm:gap-6 md:gap-8 text-black">
-                    {contact.socialLinks?.phoneNo && (
-                      <a
-                        href={`tel:${contact.socialLinks.phoneNo}`}
-                        className="transition-transform hover:scale-110"
-                        aria-label="Phone"
-                      >
-                        <FaPhone className="cursor-pointer hover:text-[#141414] text-2xl sm:text-3xl md:text-4xl" />
-                      </a>
-                    )}
-                    {contact.socialLinks?.mailId && (
-                      <a
-                        href={`mailto:${contact.socialLinks.mailId}`}
-                        className="transition-transform hover:scale-110"
-                        aria-label="Email"
-                      >
-                        <MdMail className="cursor-pointer hover:text-[#141414] text-2xl sm:text-3xl md:text-4xl" />
-                      </a>
-                    )}
-                    {contact.socialLinks?.linkedin && (
-                      <a
-                        href={contact.socialLinks.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="transition-transform hover:scale-110"
-                        aria-label="LinkedIn"
-                      >
-                        <IoLogoLinkedin className="cursor-pointer hover:text-[#141414] text-2xl sm:text-3xl md:text-4xl" />
-                      </a>
-                    )}
-                  </div>
+                  <a
+                    href={`mailto:${s.socialLinks?.mailId || BOARD_MAIL}`}
+                    className="font-poppins text-xs font-semibold tracking-[0.06em] uppercase text-accent-deep inline-flex items-center gap-2 transition-colors hover:text-ink"
+                  >
+                    Mail <LuArrowUpRight />
+                  </a>
                 </div>
-
-                {/* Image */}
-                <div className="w-full lg:w-[50%] flex items-center justify-center">
-                  <div className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[360px] lg:max-w-[400px] xl:max-w-[450px] aspect-square">
-                    <img
-                      src={contact.image}
-                      alt={contact.name}
-                      className="w-full h-full object-cover rounded-lg shadow-lg"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-            bg={index % 2 === 0 ? "#F5F5F5" : "#7BB9C4"}
-            top={index === 0 ? "-80px" : "-60px"}
-          />
-        ))}
-      </div>
+              ))}
+            </Reveal>
+          </Container>
+        </section>
+      )}
     </div>
   );
 }

@@ -22,6 +22,11 @@ const contactSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  // A contact with a club is that club's secretary; without one it is core team.
+  club: {
+    type: String,
+    trim: true,
+  },
   socialLinks: {
     linkedin: { type: String, trim: true },
     mailId: { type: String, trim: true },

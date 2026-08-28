@@ -1,40 +1,52 @@
+import { LuCircleAlert } from "react-icons/lu";
+import Container from "./Container";
 
-import React from 'react';
-import PropTypes from 'prop-types';
-
+/**
+ * Error card. Prop signature is unchanged from the previous version so every
+ * existing call site keeps working; `secondaryAction` is optional.
+ */
 function Errors({
   status_code = 404,
   title = "Page Not Found",
-  message,
+  message = "Something went wrong. Please try again in a moment.",
   onClick = () => window.history.back(),
-  buttonText = "Go back to Home"
+  buttonText = "Go back to Home",
+  secondaryAction = null,
 }) {
-
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-50">
-      <h1 className="text-4xl sm:text-6xl font-bold text-red-500 mb-4">{status_code}</h1>
-      <h2 className="text-xl sm:text-2xl font-semibold mb-2">{title}</h2>
-      <p className="text-gray-600 mb-6 text-sm sm:text-base text-center max-w-md">
-        {message || "You do not have permission to view this page. Please contact your administrator if you think this is a mistake."}
-      </p>
-      <div>
-        <button
-          type="button"
-          onClick={onClick}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-          {buttonText}
-        </button>
-      </div>
+    <div className="w-full bg-white py-16 md:py-24">
+      <Container>
+        <div className="border border-line">
+          <div className="font-poppins text-[11px] font-semibold tracking-[0.16em] uppercase text-subtle px-5 py-3.5 border-b border-line">
+            Error {status_code}
+          </div>
+          <div className="px-6 md:px-10 py-12 md:py-14 flex flex-col items-center text-center gap-4">
+            <LuCircleAlert className="text-[44px] text-danger" />
+            <span className="font-display font-bold text-[28px] md:text-[34px] uppercase text-ink">
+              {title}
+            </span>
+            <p className="max-w-[46ch] m-0 text-[15px] leading-[1.7] text-muted">{message}</p>
+            <div className="flex gap-2.5 mt-2 flex-wrap justify-center">
+              <button
+                onClick={onClick}
+                className="font-poppins text-[13px] font-semibold px-6 py-[13px] bg-ink text-white transition-colors hover:bg-accent-deep"
+              >
+                {buttonText}
+              </button>
+              {secondaryAction && (
+                <button
+                  onClick={secondaryAction.onClick}
+                  className="font-poppins text-[13px] font-semibold px-6 py-[13px] border border-[#D8D8D8] text-ink transition-colors hover:bg-surface"
+                >
+                  {secondaryAction.label}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </Container>
     </div>
   );
 }
-
-Errors.propTypes = {
-  status_code: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  title: PropTypes.string,
-  message: PropTypes.string,
-  onClick: PropTypes.func,
-  buttonText: PropTypes.string,
-};
 
 export default Errors;
