@@ -93,6 +93,37 @@ html.adminjs-sidebar-collapsed [data-css="sidebar-logo"] img {
   max-height: 36px;
 }
 
+/* "Sports Board Portal" under the logo, expanded rail only. Plain CSS
+   generated content rather than a real DOM node — StyledLogo (see
+   sidebar-branding.tsx) is a static branding element that React never
+   re-renders after mount, but ::after sidesteps the reconciliation
+   question entirely regardless, same as it did for the old "SB" fallback
+   mark this replaced. StyledLogo is display:flex with no flex-direction
+   set (defaults to row, image beside content) — force column so this
+   stacks under the image instead of beside it. */
+[data-css="sidebar-logo"] {
+  flex-direction: column;
+  align-items: center;
+}
+
+[data-css="sidebar-logo"]::after {
+  content: "Sports Board Portal";
+  display: block;
+  margin-top: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #4a4a4a;
+  text-align: center;
+}
+
+/* No room for a wordmark in a 64px icon rail — hidden along with the
+   "NAVIGATION" label for the same reason (see below). */
+html.adminjs-sidebar-collapsed [data-css="sidebar-logo"]::after {
+  display: none;
+}
+
 /* branding.logo is also used by AdminJS's separate login page (its own
    template, not the app shell this file otherwise targets — see
    login-template.tsx and components/login/index.tsx), so this stylesheet

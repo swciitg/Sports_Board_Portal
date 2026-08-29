@@ -109,11 +109,20 @@ const adminOptions = {
       }
     }
   },
-  // Adds a collapse/expand toggle to the sidebar — AdminJS has no built-in
-  // one. See admin_panel/public/admin-sidebar.{css,js} for the behaviour.
+  // Adds a collapse/expand toggle to the sidebar, and to the List page a
+  // per-resource column-visibility picker plus truncation of overflowing
+  // text cells — AdminJS has none of these built in. See
+  // admin_panel/public/admin-sidebar.{css,js} and admin-list.{css,js} for
+  // the behaviour.
   assets: {
-    styles: [`${PUBLIC_API_ROOT}/admin-assets/admin-sidebar.css`],
-    scripts: [`${PUBLIC_API_ROOT}/admin-assets/admin-sidebar.js`],
+    styles: [
+      `${PUBLIC_API_ROOT}/admin-assets/admin-sidebar.css`,
+      `${PUBLIC_API_ROOT}/admin-assets/admin-list.css`,
+    ],
+    scripts: [
+      `${PUBLIC_API_ROOT}/admin-assets/admin-sidebar.js`,
+      `${PUBLIC_API_ROOT}/admin-assets/admin-list.js`,
+    ],
   },
 };
 

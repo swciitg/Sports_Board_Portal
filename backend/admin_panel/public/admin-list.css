@@ -1,0 +1,145 @@
+/* List-view enhancements: a per-resource column visibility picker, and
+ * truncation (done in JS — see admin-list.js) of long text-field cells so a
+ * single verbose field can't blow out every row's height. This file only
+ * handles layout/paint for both.
+ * Loaded globally via `assets.styles` (admin-config.js), same as
+ * admin-sidebar.css, so like that file it only actually matches on List
+ * pages — everywhere else these selectors simply find nothing.
+ */
+
+/* A hidden column: the picker toggles this on both the <th> (found by
+   position, see admin-list.js) and every matching <td data-property-name>
+   (AdminJS stamps that attribute on every list cell — see
+   record-in-list.tsx). display:none on a table cell drops it from the
+   table's column layout entirely, so the remaining columns reflow to use
+   the freed width instead of leaving a gap. */
+.adminjs-col-hidden {
+  display: none !important;
+}
+
+/* Long plain-text fields (a Mongoose String holding a paragraph, e.g.
+   "About Desc"/"Rules") render as a bare string with no wrapper element and
+   no built-in truncation (see default-property-value.tsx) — unlike
+   richtext fields, which AdminJS already truncates to 15 characters by
+   default.
+
+   This is deliberately not a CSS max-height/overflow clip: table cells
+   follow the table layout algorithm, where a <td>'s box height is driven
+   by its row's content regardless of max-height (confirmed live —
+   clientHeight kept matching scrollHeight with max-height set), so a CSS
+   clip silently does nothing here. admin-list.js truncates the text itself
+   instead — this max-width just keeps a truncated line from stretching the
+   column unreasonably wide. */
+table[data-css$="-table"] tbody td[data-property-name] {
+  max-width: 320px;
+}
+
+table[data-css$="-table"] tbody td[data-property-name][data-full-text] {
+  cursor: help;
+}
+
+/* Column-visibility picker: a fixed corner control (same architecture as
+   admin-sidebar.js's toggle button — appended to <body>, never inside
+   AdminJS's React-owned tree, since that tree can reconcile away children
+   it didn't render itself) listing every list column as a checkbox. */
+#adminjs-columns-toggle {
+  position: fixed;
+  /* Below the top bar (the admin email/avatar sit in it, at a width that
+     varies with the logged-in email) rather than sharing its row, so
+     there's no overlap to tune for regardless of that width. */
+  top: 78px;
+  right: 32px;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 6px;
+  border: 1px solid #E0E0E0;
+  background: #fff;
+  color: #4a4a4a;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+#adminjs-columns-toggle:hover {
+  background: #F5F5F5;
+}
+
+#adminjs-columns-toggle .adminjs-columns-icon {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+#adminjs-columns-toggle .adminjs-columns-icon span {
+  display: block;
+  width: 14px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+#adminjs-columns-panel {
+  position: fixed;
+  top: 120px;
+  right: 32px;
+  z-index: 1000;
+  width: 240px;
+  max-height: 360px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+}
+
+#adminjs-columns-panel[hidden] {
+  display: none;
+}
+
+#adminjs-columns-panel .adminjs-columns-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 14px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8A8A8A;
+  border-bottom: 1px solid #F0F0F0;
+  margin-bottom: 4px;
+}
+
+#adminjs-columns-panel .adminjs-columns-reset {
+  background: none;
+  border: none;
+  color: #4F46E5;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 0;
+}
+
+#adminjs-columns-panel label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: #333;
+  cursor: pointer;
+}
+
+#adminjs-columns-panel label:hover {
+  background: #F5F5F5;
+}
+
+#adminjs-columns-panel input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+}
