@@ -15,8 +15,8 @@ export default function JoinCta() {
               every semester
             </h2>
             <p className="mt-4 mb-0 text-[17px] text-[#123C43] max-w-[46ch]">
-              Turn up at the Old SAC counter, or write to the general secretary — no prior
-              experience needed for most clubs.
+              Turn up at the Old SAC counter, or write to the general secretary. No prior
+              experience is needed for most clubs.
             </p>
           </div>
           <Link
