@@ -9,7 +9,6 @@ import AboutUs from "../models/aboutUs.js";
 import Contacts from "../models/contact.js";
 import Event from "../models/event.js";
 import Facilities from "../models/facilities.js";
-import TeamMember from "../models/teamMember.js";
 import clubMain from "../models/clubMain.js";
 import homepage from "../models/general.js";
 import announcement from "../models/announcement.js";
@@ -65,7 +64,7 @@ const authenticate = async (email, password) => {
 
 const adminOptions = {
   resources: [
-    AboutUs, Contacts, Event, Facilities, TeamMember, announcement, clubMain,
+    AboutUs, Contacts, Event, Facilities, announcement, clubMain,
     {
       resource: homepage,
       // The Leadership section's field names don't say what they hold — label

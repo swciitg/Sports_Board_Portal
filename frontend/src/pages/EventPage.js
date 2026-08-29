@@ -1,7 +1,6 @@
 import React from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { FaRegFilePdf } from "react-icons/fa6";
 import { useEventPageData } from "../hooks/useEventPageData";
 import Container from "../components/Container";
 import Reveal from "../components/Reveal";
@@ -27,22 +26,12 @@ function EventSection({ event, index }) {
   return (
     <section className={`${background} py-16 md:py-24`}>
       <Container>
-        <Reveal className="flex items-end justify-between gap-10 pb-8 border-b border-line flex-wrap">
+        <Reveal className="pb-8 border-b border-line">
           <SectionHeading
             eyebrow={`Event ${String(index + 1).padStart(2, "0")}`}
             title={event.eventName}
             size="text-[clamp(40px,4.8vw,72px)]"
           />
-          {event.eventPdf && (
-            <a
-              href={event.eventPdf}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-poppins text-[13px] font-semibold tracking-[0.04em] text-ink inline-flex items-center gap-2.5 pb-1.5 border-b border-ink transition-all duration-200 hover:gap-4 hover:text-accent-deep hover:border-accent-deep"
-            >
-              <FaRegFilePdf /> Event brochure
-            </a>
-          )}
         </Reveal>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start mt-10">
@@ -93,21 +82,6 @@ function EventSection({ event, index }) {
                   {event.milestones.map((m, i) => (
                     <li key={`${m}-${i}`} className="text-base text-ink">
                       {m}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {(event.pastWinners || []).length > 0 && (
-              <div className="mt-6 pt-6 border-t border-line">
-                <div className="font-poppins text-[11px] font-semibold tracking-[0.16em] uppercase text-subtle mb-3">
-                  Past winners
-                </div>
-                <ul className="flex flex-col gap-2 m-0 p-0 list-none">
-                  {event.pastWinners.map((w, i) => (
-                    <li key={`${w}-${i}`} className="text-base text-ink">
-                      {w}
                     </li>
                   ))}
                 </ul>
