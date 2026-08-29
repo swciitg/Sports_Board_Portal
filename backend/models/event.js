@@ -6,10 +6,6 @@ const eventSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  eventPdf: {
-    type: String,
-    required: true,
-  },
   frontImage: {
     type: String,
     required: true,
@@ -20,10 +16,6 @@ const eventSchema = new mongoose.Schema({
   },
   eventActivityDesc: {
     type: String,
-    required: true,
-  },
-  pastWinners: {
-    type: [String],
     required: true,
   },
   milestones: {

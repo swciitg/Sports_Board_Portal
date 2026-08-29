@@ -5,7 +5,6 @@ export const useHomePageData = () => {
   const [data, setData] = useState({
     aboutData: [],
     facilities: [],
-    teamMember: [],
     homepage: [],
   });
   const [error, setError] = useState(null);
