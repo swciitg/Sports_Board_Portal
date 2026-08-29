@@ -1,0 +1,983 @@
+/* ===========================================================================
+ * admin-refinements.css — spacing + typography pass over the AdminJS panel.
+ *
+ * Loaded last in `assets.styles` (see admin_panel/admin-config.js), after
+ * admin-sidebar.css and admin-list.css, so it can correct values those two
+ * files set. Everything here is a pure style override: no markup or React
+ * changes, which is the only kind of change available to us — the panel is
+ * stock AdminJS 7.8 and every visible box comes from @adminjs/design-system.
+ *
+ * Selectors lean on the two stable hook families AdminJS provides for exactly
+ * this: the `data-css="..."` attributes stamped by getDataCss/
+ * getResourceElementCss/getActionElementCss, and the `adminjs_*` classes from
+ * the design system's cssClass() helper. Both survive re-renders.
+ *
+ * WHAT THIS FIXES
+ *   1. Three different type stacks (theme Roboto, `font-family: inherit` on
+ *      the injected controls, browser default on inputs) → one stack, one
+ *      scale, one set of weights.
+ *   2. AdminJS's space scale has no 12px or 20px step, so the header
+ *      breadcrumb → title → table rhythm lands on 4/16/24/48 in a way that
+ *      reads uneven. A 4/8/12/16/20/24/32 rhythm is applied instead.
+ *   3. The injected "Columns" button was `position: fixed` at top:78/right:32
+ *      — it collided with the account dropdown and its panel covered
+ *      "Create new". It is moved into the action-header button row.
+ *   4. Table rows were sized by whichever cell held the longest paragraph.
+ *      Every cell is now clamped to two lines with the full value on hover,
+ *      so row height is uniform.
+ *   5. Near-invisible states: table head `rgba(0,0,0,0.01)`, row hover
+ *      `rgba(0,0,0,0.01)`, and a sidebar hover of `rgba(text, 0.2)` that was
+ *      far too dark. All three are given deliberate values.
+ * ======================================================================== */
+
+/* --------------------------------------------------------------------------
+ * 0. Tokens
+ *
+ * Kept as custom properties so a future change is one edit. The greys stay
+ * inside the panel's existing white/neutral family; the accent is the
+ * primary100 already set in branding.theme.colors.
+ * ----------------------------------------------------------------------- */
+:root {
+  --sbp-font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --sbp-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --sbp-ink: #0C1E29;        /* body text — theme colors.text, unchanged */
+  --sbp-ink-2: #454655;      /* secondary text — theme colors.grey80 */
+  --sbp-muted: #7A7F8A;      /* micro labels, meta */
+  --sbp-faint: #9AA0AA;      /* hints, disabled */
+  --sbp-hairline: #EAECEF;   /* borders (theme border #EEEEEF, nudged) */
+  --sbp-rule: #F2F3F5;       /* in-table row separators */
+  --sbp-tint: #F8F9F9;       /* table head, page bg (theme colors.bg) */
+  --sbp-hover: #FAFAFB;      /* row hover */
+  --sbp-chip: #F4F5F7;       /* neutral chips */
+  --sbp-accent: #4F46E5;     /* branding.theme.colors.primary100 */
+  --sbp-accent-wash: #EEEDFC;
+  --sbp-accent-ring: rgba(79, 70, 229, 0.12);
+
+  --sbp-radius-control: 6px;
+  --sbp-radius-card: 10px;
+  --sbp-control-h: 36px;
+  --sbp-input-h: 38px;
+}
+
+/* --------------------------------------------------------------------------
+ * 1. Type
+ *
+ * Preferred fix is `branding.theme.font` in admin-config.js — styled-
+ * components then thread the family through every component, which is why
+ * it alone is enough for anything the design system renders (e.g. H2: its
+ * font-family comes from a styled-components class, which always beats a
+ * bare-tag selector on specificity regardless of load order). This block
+ * is the belt-and-braces version for what that can't reach: native
+ * inputs/buttons/body text with no styled-components rule of their own,
+ * and our own injected controls using `font-family: inherit`.
+ *
+ * `!important` is required here, unlike the rest of this section — the
+ * body tag needs it. layout-template.tsx and login-template.tsx order
+ * `${styles.join('\n')}` (this stylesheet) differently relative to
+ * AdminJS's own inline CSS-reset <style> block, which sets `font: inherit`
+ * (a shorthand resetting font-family too) on `body` among ~80 other tags.
+ * On the login page specifically, that reset loads AFTER this stylesheet,
+ * so at equal specificity (both are the bare `body` selector) it wins the
+ * cascade tie without !important — confirmed live: body computed to Times
+ * New Roman despite this rule being present and --sbp-font resolving fine.
+ * ----------------------------------------------------------------------- */
+body,
+body input,
+body textarea,
+body select,
+body button,
+body .adminjs_Box,
+body .adminjs_Text,
+body .adminjs_Label,
+body .adminjs_Link,
+body .adminjs_Button,
+body .adminjs_Badge,
+body .adminjs_Header,
+body .adminjs_Table,
+body .adminjs_Input {
+  font-family: var(--sbp-font) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ids and timestamps read better tabular. `data-property-name="_id"` is what
+   the Mongoose adapter names the primary key. */
+table[data-css$="-table"] tbody td[data-property-name="_id"],
+table[data-css$="-table"] tbody td[data-property-name="id"] {
+  font-family: var(--sbp-mono);
+  font-size: 12px;
+  color: var(--sbp-muted);
+}
+
+/* --------------------------------------------------------------------------
+ * 2. Top bar
+ *
+ * The bar's right padding came from CurrentUserNav's own `px="xl"` (24px)
+ * while the page gutter below it is 32px — the account block sat 8px inside
+ * the content edge. `data-css="logged-in"` is the wrapper AdminJS puts around
+ * it (see app/logged-in.tsx), so 8px there squares the two.
+ * ----------------------------------------------------------------------- */
+[data-css="topbar"] {
+  border-bottom: 1px solid var(--sbp-hairline);
+}
+
+[data-css="logged-in"] {
+  padding-right: 8px;
+}
+
+/* Session email: was 14px at the design system's default near-black. */
+[data-css="logged-in"] a,
+[data-css="logged-in"] > section > section {
+  color: var(--sbp-ink-2);
+}
+
+/* Avatar: 36px is heavy against a 64px bar. */
+[data-css="logged-in"] .adminjs_Box + div,
+[data-css="topbar"] [class*="Avatar"] {
+  width: 32px;
+  height: 32px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Account dropdown — the design system's `shadows.card` is a flat 0 4px 8px
+   black at 10%, which reads muddy on white. */
+[data-css="logged-in"] .adminjs_DropDownMenu {
+  border: 1px solid var(--sbp-hairline);
+  border-radius: var(--sbp-radius-card);
+  box-shadow: 0 8px 24px rgba(12, 30, 41, 0.10);
+  padding: 6px;
+}
+
+[data-css="logged-in"] .adminjs_DropDownMenu > * {
+  padding: 8px 12px;
+  border-radius: var(--sbp-radius-control);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* --------------------------------------------------------------------------
+ * 3. Sidebar
+ * ----------------------------------------------------------------------- */
+[data-css="sidebar"] {
+  border-right: 1px solid var(--sbp-hairline);
+}
+
+/* Branding block. admin-sidebar.css sizes the logo to 72px and appends the
+   wordmark as ::after; this only adjusts the rhythm around it and brings the
+   wordmark onto the type scale (was 13px/600 with 0.02em tracking). */
+[data-css="sidebar-logo"] {
+  padding: 24px 32px 28px !important;
+}
+
+[data-css="sidebar-logo"] img {
+  max-width: 64px !important;
+  max-height: 64px !important;
+}
+
+[data-css="sidebar-logo"]::after {
+  margin-top: 12px !important;
+  font-size: 13px !important;
+  line-height: 18px;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+  color: var(--sbp-ink-2) !important;
+}
+
+/* Navigation container. StyledNavigation is `px="xl" py="lg"` (24/16); the
+   rail's own inner padding is reduced so nav rows can be wider and still sit
+   on a 16px gutter. */
+[data-css="sidebar-resources"] > section {
+  padding: 0 16px !important;
+}
+
+/* "NAVIGATION" — onto the same micro-label style as the table headers and
+   the Columns panel title, so all three agree. */
+[data-css="sidebar-resources"] .adminjs_Label {
+  padding-left: 12px !important;
+  margin-bottom: 8px !important;
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  color: var(--sbp-muted);
+}
+
+/* Nav rows. StyledNavigationElement ships `padding: 7px 16px` and
+   `border-radius: 4px`. */
+[data-css="sidebar-resources"] a {
+  padding: 8px 12px !important;
+  border-radius: var(--sbp-radius-control) !important;
+  gap: 12px;
+}
+
+/* The row label is a bare styled div (design system's Title) with no class of
+   its own — reachable only as the anchor's element child. */
+[data-css="sidebar-resources"] a > div {
+  font-size: 14px !important;
+  line-height: 20px !important;
+}
+
+[data-css="sidebar-resources"] a > .icon-box {
+  padding-right: 0 !important;
+}
+
+/* Hover was `rgba(theme.colors.text, 0.2)` — a 20% near-black wash, easily
+   the harshest state in the panel. */
+[data-css="sidebar-resources"] a:hover {
+  background-color: rgba(12, 30, 41, 0.04) !important;
+}
+
+/* Selected was `rgba(primary100, 0.2)`, strong enough to fight the label. */
+[data-css="sidebar-resources"] a[class*="isSelected"],
+[data-css="sidebar-resources"] li > a[aria-current],
+[data-css="sidebar-resources"] a:has(+ ul),
+[data-css="sidebar-resources"] a[style*="rgba(79, 70, 229, 0.2)"] {
+  background-color: var(--sbp-accent-wash) !important;
+  color: var(--sbp-accent) !important;
+}
+
+/* Child resource list. StyledNavigation indents children with
+   `padding-left: 48px`; a guide rule replaces most of that indent so the
+   group reads as one block. */
+[data-css="sidebar-resources"] ul ul {
+  margin: 4px 0 0 20px;
+  padding-left: 0;
+  border-left: 1px solid var(--sbp-hairline);
+}
+
+[data-css="sidebar-resources"] ul ul > li a {
+  padding-left: 24px !important;
+  margin-left: 0;
+  color: var(--sbp-ink-2);
+}
+
+/* Collapse toggle (admin-sidebar.css). Was a 24px circle at top:24px, which
+   sits above the topbar's vertical centre and below the logo — visually
+   unanchored. Centred on the 64px bar instead. */
+#adminjs-sidebar-toggle {
+  top: 18px !important;
+  left: 286px !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 8px !important;
+  border-color: var(--sbp-hairline) !important;
+  color: var(--sbp-muted) !important;
+  font-size: 15px !important;
+  box-shadow: 0 1px 2px rgba(12, 30, 41, 0.06) !important;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+#adminjs-sidebar-toggle:hover {
+  background: var(--sbp-tint) !important;
+  color: var(--sbp-ink) !important;
+}
+
+html.adminjs-sidebar-collapsed #adminjs-sidebar-toggle {
+  top: 60px !important;
+  left: 46px !important;
+}
+
+/* --------------------------------------------------------------------------
+ * 4. Action header rhythm
+ *
+ * ActionHeader (app/action-header/action-header.tsx) is:
+ *   section.adminjs_ActionHeader
+ *     > section        breadcrumbs row
+ *     > section        [ title box (mt lg) , actions box (mt xl, mb default) ]
+ *
+ * H2 also inherits the design system's `* > &:first-child { margin-top: 4px }`
+ * on top of its own `marginTop: x3`, so its real offset is 4px — a value
+ * nothing else in the layout shares. Everything below is set explicitly so
+ * the vertical positions are known (they have to be: the Columns button is
+ * positioned against them in §5).
+ *
+ *   topbar 64 + gutter 32                  → 96   breadcrumb top
+ *   breadcrumb 13/18                       → 114  breadcrumb bottom
+ *   + 20                                   → 134  title top
+ *   title 32/40                            → 174  title bottom
+ *   + 20                                   → 194  table card top
+ *   actions centred on title: 114 + 22     → 136  button top (36 tall)
+ * ----------------------------------------------------------------------- */
+.adminjs_Breadcrumbs a,
+.adminjs_Breadcrumbs .adminjs_Text {
+  font-size: 13px !important;
+  line-height: 18px !important;
+  color: var(--sbp-muted) !important;
+}
+
+.adminjs_Breadcrumbs a:last-child {
+  color: var(--sbp-ink) !important;
+}
+
+.adminjs_Breadcrumbs a::after {
+  padding: 0 8px !important;
+  color: #C3C7CE !important;
+}
+
+.adminjs_ActionHeader > section:nth-child(2) {
+  align-items: flex-start;
+}
+
+.adminjs_ActionHeader > section:nth-child(2) > section:nth-child(1) {
+  margin-top: 0 !important;
+}
+
+.adminjs_ActionHeader .adminjs_H2 {
+  margin: 20px 0 0 !important;
+  font-size: 32px !important;
+  line-height: 40px !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.02em;
+}
+
+/* The record-count badge: outline Badge at 12px with a grey40 border and 20px
+   radius, sitting on the text baseline. A filled neutral chip aligned to the
+   title's optical centre reads as metadata rather than as a control. */
+.adminjs_ActionHeader .adminjs_Badge {
+  margin-left: 12px !important;
+  padding: 0 8px !important;
+  height: 22px;
+  line-height: 22px;
+  border: 0 !important;
+  border-radius: 11px !important;
+  background: var(--sbp-chip) !important;
+  color: var(--sbp-muted) !important;
+  font-size: 12px !important;
+  font-weight: 500;
+  letter-spacing: 0;
+  vertical-align: 6px;
+}
+
+/* Actions box: centred against the 40px title, and 128px of room reserved on
+   the right for the Columns button (§5). */
+.adminjs_ActionHeader > section:nth-child(2) > section:nth-child(2) {
+  margin: 22px 0 0 !important;
+  padding-right: 128px;
+}
+
+/* Table card starts 20px under the title instead of inheriting whatever the
+   actions box's bottom margin happened to be. */
+[data-css$="-list-table-wrapper"] {
+  margin-top: 20px;
+}
+
+/* --------------------------------------------------------------------------
+ * 5. Columns control, moved into the header row
+ *
+ * admin-list.js appends the button and panel to <body> on purpose (the List
+ * table is React-owned; mounting into it risks reconciliation). So it stays a
+ * body child and is positioned into the row instead — 136px matches the
+ * button top computed in §4, and the 128px reserve above keeps it clear of
+ * Filter. A fixed 120px width makes that reserve exact.
+ *
+ * Scoped to the widest breakpoint: below 1324px AdminJS overlays the sidebar
+ * and the action header switches from flex to block, so the arithmetic above
+ * no longer holds and the original floating position (admin-list.css) is the
+ * safer one — that base rule is deliberately left in place as the fallback,
+ * not dead code.
+ * ----------------------------------------------------------------------- */
+@media (min-width: 1324px) {
+  #adminjs-columns-toggle {
+    top: 136px !important;
+    right: 32px !important;
+    width: 120px;
+    justify-content: center;
+  }
+
+  #adminjs-columns-panel {
+    top: 184px !important;   /* button bottom (172) + 12 */
+    right: 32px !important;
+  }
+}
+
+#adminjs-columns-toggle {
+  box-sizing: border-box;   /* so --sbp-control-h is the real outer height, which
+                              is what the 184px panel anchor above counts on */
+  height: var(--sbp-control-h) !important;
+  padding: 0 16px !important;
+  gap: 8px !important;
+  border: 1px solid #DFE2E7 !important;
+  border-radius: var(--sbp-radius-control) !important;
+  background: #fff !important;
+  color: var(--sbp-ink-2) !important;
+  font-size: 14px !important;   /* was 13px — the only 13px control here */
+  font-weight: 500;
+  box-shadow: none !important;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+#adminjs-columns-toggle:hover {
+  background: var(--sbp-tint) !important;
+  border-color: #C9CED6 !important;
+}
+
+#adminjs-columns-toggle .adminjs-columns-icon {
+  gap: 3px !important;
+}
+
+#adminjs-columns-toggle .adminjs-columns-icon span {
+  height: 1.5px !important;
+}
+
+#adminjs-columns-panel {
+  width: 232px !important;
+  padding: 6px !important;
+  border: 1px solid var(--sbp-hairline) !important;
+  border-radius: var(--sbp-radius-card) !important;
+  box-shadow: 0 8px 24px rgba(12, 30, 41, 0.10) !important;
+}
+
+#adminjs-columns-panel .adminjs-columns-title {
+  padding: 8px 10px 10px !important;
+  margin-bottom: 6px !important;
+  border-bottom-color: var(--sbp-rule) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.07em !important;
+  color: var(--sbp-muted) !important;
+}
+
+#adminjs-columns-panel .adminjs-columns-reset {
+  font-size: 12px !important;
+  font-weight: 500;
+  color: var(--sbp-accent) !important;
+}
+
+#adminjs-columns-panel label {
+  padding: 7px 10px !important;
+  gap: 10px !important;
+  border-radius: var(--sbp-radius-control);
+  font-size: 14px !important;   /* was 13px */
+  line-height: 20px;
+  color: var(--sbp-ink) !important;
+}
+
+#adminjs-columns-panel label:hover {
+  background: var(--sbp-tint) !important;
+}
+
+#adminjs-columns-panel input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--sbp-accent);
+}
+
+/* --------------------------------------------------------------------------
+ * 6. Buttons
+ *
+ * ButtonCSS sizes `md` at `py: sm, px: xxl` — 4px vertical against 32px
+ * horizontal, which is why the buttons read as wide slabs. A fixed 36px
+ * height with 16px sides puts them on the same metric as the Columns control
+ * and the inputs. ButtonGroup's 16px inter-button margin drops to 8px so a
+ * group reads as one cluster.
+ * ----------------------------------------------------------------------- */
+.adminjs_ActionHeader .adminjs_Button,
+.adminjs_ActionHeader .adminjs_ButtonGroupItem,
+.adminjs_Drawer .adminjs_Button {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;   /* Button carries a 1px border; without this the
+                               36px lands as 38 and stops matching the inputs */
+  height: var(--sbp-control-h);
+  padding: 0 16px !important;
+  border-radius: var(--sbp-radius-control) !important;
+  font-size: 14px !important;
+  font-weight: 500;
+  line-height: 1 !important;
+}
+
+.adminjs_ActionHeader .adminjs_Button .adminjs_Icon,
+.adminjs_Drawer .adminjs_Button .adminjs_Icon {
+  margin: 0 !important;
+}
+
+.adminjs_ActionHeader > section:nth-child(2) > section:nth-child(2) > .adminjs_ButtonGroupItem {
+  margin-right: 8px !important;
+}
+
+/* Primary action first, everything else quiet. In the stock panel "Create
+   new" and "Filter" are both indigo-on-white with only a border between
+   them, so nothing reads as the primary action — while the empty state's
+   "Create first record" is a filled button. This makes the two agree. */
+.adminjs_ActionHeader > section:nth-child(2) > section:nth-child(2) > .adminjs_ButtonGroupItem:first-child {
+  background: var(--sbp-accent) !important;
+  border-color: var(--sbp-accent) !important;
+  color: #fff !important;
+}
+
+.adminjs_ActionHeader > section:nth-child(2) > section:nth-child(2) > .adminjs_ButtonGroupItem:first-child:hover {
+  background: #4038C4 !important;
+  border-color: #4038C4 !important;
+}
+
+.adminjs_ActionHeader > section:nth-child(2) > section:nth-child(2) > .adminjs_ButtonGroupItem:not(:first-child) {
+  border-color: #DFE2E7 !important;
+  color: var(--sbp-ink-2) !important;
+}
+
+.adminjs_ActionHeader > section:nth-child(2) > section:nth-child(2) > .adminjs_ButtonGroupItem:not(:first-child):hover {
+  background: var(--sbp-tint) !important;
+  border-color: #C9CED6 !important;
+}
+
+.adminjs_ActionHeader > section:nth-child(2) > section:nth-child(2) > .adminjs_ButtonGroupItem:not(:first-child) .adminjs_Icon svg {
+  stroke: var(--sbp-muted) !important;
+}
+
+/* --------------------------------------------------------------------------
+ * 7. Table
+ * ----------------------------------------------------------------------- */
+
+/* List's container Box is `variant="container"`: white, 8px radius, 24px
+   padding. Padding drops to 8px so the head row's rounded fill can breathe
+   inside a bordered card, and the card gains a border — a shadowless white
+   card on a #F8F9F9 page has almost no edge. */
+[data-css$="-list-table-wrapper"] {
+  padding: 8px !important;
+  border: 1px solid var(--sbp-hairline);
+  border-radius: var(--sbp-radius-card) !important;
+  overflow-x: auto;    /* wide resources scroll instead of crushing columns */
+}
+
+/* Table's own left/right borders duplicate the card border. */
+table[data-css$="-table"] {
+  border-left: 0 !important;
+  border-right: 0 !important;
+}
+
+/* Head. `background: rgba(0,0,0,0.01)` is effectively invisible; header cells
+   were 12px bold near-black, i.e. heavier than the data under them. */
+table[data-css$="-table"] thead {
+  background: var(--sbp-tint) !important;
+}
+
+table[data-css$="-table"] thead td,
+table[data-css$="-table"] thead a {
+  padding: 10px 16px !important;
+  font-size: 11px !important;
+  line-height: 16px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--sbp-muted) !important;
+}
+
+table[data-css$="-table"] thead td:first-child {
+  border-radius: var(--sbp-radius-control) 0 0 var(--sbp-radius-control);
+}
+
+table[data-css$="-table"] thead td:last-child {
+  border-radius: 0 var(--sbp-radius-control) var(--sbp-radius-control) 0;
+}
+
+table[data-css$="-table"] thead td {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+
+table[data-css$="-table"] thead a:hover {
+  color: var(--sbp-accent) !important;
+}
+
+/* Body cells. TableCell is `p: lg` (16px all round) with a 16px line-height —
+   too tight for text that wraps. 14px/16px with a 20px line-height gives a
+   comfortable row without adding height, since the clamp below caps it. */
+table[data-css$="-table"] tbody td {
+  padding: 14px 16px !important;
+  border-top: 1px solid var(--sbp-rule) !important;
+  border-bottom: 0 !important;
+  font-size: 14px !important;
+  line-height: 20px !important;
+  min-width: 120px;
+}
+
+table[data-css$="-table"] tbody tr:first-child td {
+  border-top: 1px solid var(--sbp-rule) !important;
+}
+
+/* The checkbox and actions columns must not inherit the 120px floor. */
+table[data-css$="-table"] tbody td:first-child,
+table[data-css$="-table"] thead td:first-child {
+  min-width: 0;
+  width: 1px;
+}
+
+table[data-css$="-table"] tbody td:last-child,
+table[data-css$="-table"] thead td:last-child {
+  min-width: 0;
+  width: 64px;
+}
+
+/* Two-line clamp.
+ *
+ * This is the fix admin-list.css could not make: a <td>'s box height in
+ * standard table layout follows its row's content regardless of max-height,
+ * so clipping the cell itself does nothing (which is why admin-list.js
+ * resorted to rewriting text nodes). But BasePropertyComponent wraps every
+ * value in a Box — a real <section> inside the td — and that element clamps
+ * normally. So the clamp goes there, and the JS only has to keep supplying
+ * the hover tooltip.
+ *
+ * 2 × 20px line-height = 40px. */
+table[data-css$="-table"] tbody td[data-property-name] > section {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 40px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* The 320px cap from admin-list.css was there to stop a truncated line from
+   stretching a column; with the clamp doing that job it only forces
+   unnecessary wrapping. */
+table[data-css$="-table"] tbody td[data-property-name] {
+  max-width: 420px;
+}
+
+/* Row states. Hover was `rgba(0,0,0,0.01)`; selected was primary at 3%. */
+table[data-css$="-table"] tbody tr:not(.selected):hover {
+  background: var(--sbp-hover) !important;
+}
+
+table[data-css$="-table"] tbody tr.selected {
+  background: var(--sbp-accent-wash) !important;
+}
+
+/* Checkboxes: 2px radius at 16px reads as a rendering artefact. */
+.adminjs_Checkbox > a {
+  border-radius: 4px !important;
+  border-color: #C3C7CE !important;
+}
+
+/* Row action trigger — an icon-only button that still carried the 16px icon
+   margin from ButtonCSS. */
+table[data-css$="-table"] tbody td.options .adminjs_Button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0 !important;
+  border-radius: var(--sbp-radius-control) !important;
+}
+
+table[data-css$="-table"] tbody td.options .adminjs_Button:hover {
+  background: var(--sbp-tint) !important;
+}
+
+table[data-css$="-table"] tbody td.options .adminjs_Icon {
+  margin: 0 !important;
+}
+
+/* Pagination sits directly under the table with the design system's `mt: xl`. */
+[data-css$="-list-table-wrapper"] > .adminjs_Text {
+  margin-top: 16px !important;
+}
+
+/* --------------------------------------------------------------------------
+ * 8. Forms — Edit / New / Filter
+ *
+ * `.adminjs_Drawer` (the real overlay Drawer primitive — drawer-portal.tsx,
+ * filter-drawer.tsx) only ever wraps the Filter panel in this app: New/Edit/
+ * Show reuse the exact same DrawerContent/DrawerFooter building blocks
+ * (edit.tsx, new.tsx, show.tsx) but render them inline on a full page,
+ * since none of this resource config sets `showInDrawer` — confirmed live,
+ * no element anywhere carries `.adminjs_Drawer` outside the Filter panel.
+ * So every rule below that needs to reach those, not just the Filter
+ * drawer, is scoped to `:is(.adminjs_Drawer, [data-css$="-drawer-content"])`
+ * — that data-css is the one thing DrawerContent always carries either way
+ * (getActionElementCss(resourceId, action.name, 'drawer-content')).
+ * ----------------------------------------------------------------------- */
+.adminjs_Input,
+:is(.adminjs_Drawer, [data-css$="-drawer-content"]) textarea,
+:is(.adminjs_Drawer, [data-css$="-drawer-content"]) input[type="text"],
+:is(.adminjs_Drawer, [data-css$="-drawer-content"]) input[type="password"],
+:is(.adminjs_Drawer, [data-css$="-drawer-content"]) input[type="number"] {
+  box-sizing: border-box;
+  min-height: var(--sbp-input-h);
+  padding: 8px 12px !important;
+  border: 1px solid #DFE2E7 !important;
+  border-radius: var(--sbp-radius-control) !important;
+  font-size: 14px !important;
+  line-height: 20px !important;
+  color: var(--sbp-ink) !important;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.adminjs_Input:hover {
+  border-color: #C9CED6 !important;
+}
+
+/* Focus was a bare border colour change, easy to miss. */
+.adminjs_Input:focus,
+:is(.adminjs_Drawer, [data-css$="-drawer-content"]) textarea:focus {
+  border-color: var(--sbp-accent) !important;
+  box-shadow: 0 0 0 3px var(--sbp-accent-ring) !important;
+}
+
+/* Each field's own outer wrapper (not a distinctly-classed "FormGroup" —
+   base-property-component.tsx renders every property, edit or new, as
+   `<Box data-testid="property-edit-<path>">`, a bare adminjs_Box; confirmed
+   live, `[class*="FormGroup"]` matches nothing) currently has 0 margin, so
+   the 20px rhythm here comes entirely from this. */
+[data-testid^="property-edit-"] {
+  margin-bottom: 20px !important;
+}
+
+:is(.adminjs_Drawer, [data-css$="-drawer-content"]) .adminjs_Label {
+  margin-bottom: 6px !important;
+  font-size: 12px !important;
+  line-height: 16px !important;
+  font-weight: 500 !important;
+  color: var(--sbp-ink-2) !important;
+}
+
+/* FormMessage reserves a fixed 24px row under every field whether or not
+   there's an error, which is most of the loose feeling in a long form.
+   FormMessage (`styled(Text)`, default-type/edit.tsx) inherits Text's own
+   class rather than getting one of its own — `[class*="FormMessage"]`
+   matches nothing (confirmed live). It's the last of the three children
+   default-type/edit.tsx's FormGroup div renders (Label, the input, then
+   this), which is what makes it reachable at all. */
+[data-testid^="property-edit-"] > div > .adminjs_Text:last-child:empty {
+  display: none;
+}
+
+[data-testid^="property-edit-"] > div > .adminjs_Text:last-child {
+  height: auto !important;
+  margin-top: 6px !important;
+  font-size: 12px !important;
+  line-height: 16px !important;
+}
+
+/* Property descriptions (the `description` strings set on the Home Page
+   Data resource in admin-config.js) render as a small info-icon + tooltip
+   next to the label (property-description/index.tsx — Icon in a Tooltip,
+   no text block, no class of its own), not inline caption text — there's
+   nothing here for a font-size/color rule to style, so unlike the rest of
+   this section this one is intentionally not carried over from the design. */
+
+/* --------------------------------------------------------------------------
+ * 9. Show view
+ *
+ * ValueGroup (@adminjs/design-system's molecules/value-group) renders
+ * `<Box mb="xl"><Label variant="light">…</Label><Text>…</Text></Box>` — a
+ * bare Box with no class of its own beyond `adminjs_Box`, so it can't be
+ * selector-matched directly (a `[class*="ValueGroup"]` variant of this rule
+ * would never match anything — confirmed against the design-system source).
+ * BasePropertyComponent (base-property-component.tsx) is what makes each
+ * row reachable: it wraps every property in
+ * `<Box data-testid={\`property-${where}-${property.path}\`}>`, one level
+ * above ValueGroup, regardless of property type. `> section` reaches the
+ * ValueGroup Box inside that.
+ * ----------------------------------------------------------------------- */
+:is(.adminjs_Drawer, [data-css$="-drawer-content"]) [data-testid^="property-show-"] > section {
+  margin-bottom: 0 !important;
+  padding: 16px 0;
+  border-top: 1px solid var(--sbp-rule);
+}
+
+:is(.adminjs_Drawer, [data-css$="-drawer-content"]) [data-testid^="property-show-"] .adminjs_Label {
+  margin-bottom: 6px !important;
+  font-size: 11px !important;
+  line-height: 16px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--sbp-muted) !important;
+}
+
+:is(.adminjs_Drawer, [data-css$="-drawer-content"]) [data-testid^="property-show-"] .adminjs_Text {
+  font-size: 14px !important;
+  line-height: 21px !important;
+  color: var(--sbp-ink) !important;
+  text-wrap: pretty;
+  word-break: break-word;
+}
+
+/* --------------------------------------------------------------------------
+ * 10. Drawer
+ *
+ * DrawerContent is `padding: 48px 32px 24px` and DrawerFooter is
+ * `32px 16px` with `justify-content: space-around` — three different
+ * horizontal insets in one panel, and a centred Save button.
+ *
+ * The card shadow, title size and back-button rules just below stay
+ * `.adminjs_Drawer`-only on purpose (unlike §8/§9 above): they're specific
+ * to an actual overlay panel — a shadow implies an edge to cast it from,
+ * and StyledBackButton (action-header.tsx) is conditionally rendered only
+ * `{action.showInDrawer && ...}`, i.e. never on New/Edit/Show here. Content
+ * and footer spacing genuinely apply either way, so those two keep the
+ * `[data-css$="-drawer-content"/"-drawer-footer"]` fallback from §8/§9.
+ * ----------------------------------------------------------------------- */
+[data-css="drawer"],
+.adminjs_Drawer {
+  box-shadow: -1px 0 0 var(--sbp-hairline), -4px 0 16px rgba(107, 119, 129, 0.10);
+}
+
+:is(.adminjs_Drawer, [data-css$="-drawer-content"]) {
+  padding: 32px !important;
+}
+
+:is(.adminjs_Drawer, [data-css$="-drawer-footer"]) {
+  justify-content: flex-end !important;
+  gap: 8px;
+  padding: 16px 32px !important;
+  border-top: 1px solid var(--sbp-hairline);
+  background: #fff;
+}
+
+.adminjs_Drawer .adminjs_H3,
+.adminjs_Drawer .adminjs_H2 {
+  margin: 0 0 6px !important;
+  font-size: 20px !important;
+  line-height: 28px !important;
+  font-weight: 500 !important;
+}
+
+/* Back button in the drawer header. */
+.adminjs_Drawer .adminjs_ActionHeader .adminjs_Button[size="icon"],
+.adminjs_Drawer [class*="StyledBackButton"] {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+  border-color: var(--sbp-hairline) !important;
+  color: var(--sbp-muted) !important;
+}
+
+/* --------------------------------------------------------------------------
+ * 11. Empty state
+ *
+ * InfoBox: H4 at 24px/32px with a 32px top margin over a 14px line and a
+ * 32px gap before the button. The illustration is 3–4× the size of anything
+ * else on screen.
+ * ----------------------------------------------------------------------- */
+.adminjs_InfoBox {
+  padding: 32px !important;
+}
+
+.adminjs_InfoBox svg {
+  max-width: 104px;
+  max-height: 104px;
+}
+
+.adminjs_InfoBox .adminjs_H4 {
+  margin: 24px 0 8px !important;
+  font-size: 20px !important;
+  line-height: 28px !important;
+  font-weight: 500 !important;
+}
+
+.adminjs_InfoBox .adminjs_Text {
+  margin-bottom: 24px !important;
+  max-width: 340px;
+  font-size: 14px !important;
+  line-height: 20px !important;
+  color: var(--sbp-muted) !important;
+  text-wrap: pretty;
+}
+
+.adminjs_InfoBox .adminjs_Button {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  height: var(--sbp-control-h);
+  padding: 0 16px !important;
+  border-radius: var(--sbp-radius-control) !important;
+  font-size: 14px !important;
+  font-weight: 500;
+  line-height: 1 !important;
+}
+
+.adminjs_InfoBox .adminjs_Button .adminjs_Icon {
+  margin: 0 !important;
+}
+
+/* --------------------------------------------------------------------------
+ * 12. Login
+ *
+ * The card is a hard-edged 440px-tall box: no radius, a 48px-padded indigo
+ * panel next to a 48px-padded form, and inputs at the design system's 2px
+ * radius. admin-sidebar.css already caps the logo here.
+ * ----------------------------------------------------------------------- */
+.login__Wrapper > section {
+  height: auto !important;
+  min-height: 440px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 24px 0 rgba(137, 138, 154, 0.15);
+}
+
+.login__Wrapper .adminjs_H2 {
+  margin: 0 !important;
+  font-size: 28px !important;
+  line-height: 36px !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em;
+}
+
+.login__Wrapper .adminjs_H2 + .adminjs_Text {
+  margin-top: 16px !important;
+  font-size: 14px !important;
+  line-height: 22px !important;
+  font-weight: 400 !important;
+  color: rgba(255, 255, 255, 0.82) !important;
+  text-wrap: pretty;
+}
+
+.login__Wrapper h5 {
+  margin: 0 0 20px !important;
+}
+
+.login__Wrapper h5 img {
+  max-width: 56px !important;
+  max-height: 56px !important;
+  margin: 0 0 0 !important;
+}
+
+/* Same "FormGroup" isn't a real class here as in §8 (confirmed live: this
+   selector matched nothing) — Email/Password's shared wrapper div has none
+   of its own either, so :has() reaches it via the Label it does carry. */
+.login__Wrapper div:has(> .adminjs_Label) {
+  margin-bottom: 20px !important;
+}
+
+.login__Wrapper .adminjs_Label {
+  margin-bottom: 6px !important;
+  font-size: 12px !important;
+  line-height: 16px !important;
+  font-weight: 500 !important;
+  color: var(--sbp-ink-2) !important;
+}
+
+.login__Wrapper .adminjs_Input {
+  box-sizing: border-box;
+  height: 40px;
+  padding: 0 12px !important;
+  border-radius: var(--sbp-radius-control) !important;
+}
+
+/* Login button was `Text mt="xl" textAlign="center"` wrapping a slab button. */
+.login__Wrapper .adminjs_Button {
+  display: block !important;
+  box-sizing: border-box;
+  width: 100%;
+  height: 40px;
+  padding: 0 !important;
+  border-radius: var(--sbp-radius-control) !important;
+  font-size: 14px !important;
+  font-weight: 500;
+  line-height: 40px !important;
+}
+
+.login__Wrapper [class*="MessageBox"] {
+  border-radius: var(--sbp-radius-control) !important;
+  font-size: 13px !important;
+}

@@ -1,7 +1,7 @@
-/* List-view enhancements: a per-resource column visibility picker, and
- * truncation (done in JS — see admin-list.js) of long text-field cells so a
- * single verbose field can't blow out every row's height. This file only
- * handles layout/paint for both.
+/* List-view enhancements: a per-resource column visibility picker (the rest
+ * of this file), plus the "there's more" cursor for cells admin-list.js has
+ * given a hover tooltip — the visible clamp on long text-field cells itself
+ * is in admin-refinements.css §7, layered on top of this file.
  * Loaded globally via `assets.styles` (admin-config.js), same as
  * admin-sidebar.css, so like that file it only actually matches on List
  * pages — everywhere else these selectors simply find nothing.
@@ -17,23 +17,12 @@
   display: none !important;
 }
 
-/* Long plain-text fields (a Mongoose String holding a paragraph, e.g.
-   "About Desc"/"Rules") render as a bare string with no wrapper element and
-   no built-in truncation (see default-property-value.tsx) — unlike
-   richtext fields, which AdminJS already truncates to 15 characters by
-   default.
-
-   This is deliberately not a CSS max-height/overflow clip: table cells
-   follow the table layout algorithm, where a <td>'s box height is driven
-   by its row's content regardless of max-height (confirmed live —
-   clientHeight kept matching scrollHeight with max-height set), so a CSS
-   clip silently does nothing here. admin-list.js truncates the text itself
-   instead — this max-width just keeps a truncated line from stretching the
-   column unreasonably wide. */
-table[data-css$="-table"] tbody td[data-property-name] {
-  max-width: 320px;
-}
-
+/* The visible 2-line clamp on long plain-text fields (e.g. "About Desc",
+   "Rules") lives in admin-refinements.css §7, which also sets this cell's
+   max-width — see that file for why it targets the value's wrapper <section>
+   rather than the <td> itself. This just adds a "there's more" affordance:
+   admin-list.js stamps data-full-text on any cell it truncated for the
+   `title` tooltip, so give those a help cursor. */
 table[data-css$="-table"] tbody td[data-property-name][data-full-text] {
   cursor: help;
 }

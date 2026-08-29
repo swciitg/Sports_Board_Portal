@@ -1,17 +1,22 @@
 /* Per-resource "which columns to show" picker for the AdminJS List page,
- * plus truncating long text-field cells (with a hover tooltip for the full
- * value) so a single verbose field can't blow out every row's height.
- * AdminJS has no built-in column picker, and no truncation for plain
- * string fields — richtext fields are already truncated by AdminJS itself
- * (see richtext/list.tsx, `lodash/truncate` to 15 chars by default); this
- * only had to cover the ones it doesn't (default-property-value.tsx
- * renders a raw string with no wrapper and no length limit at all).
+ * plus a hover tooltip carrying the full value of every long text-field
+ * cell. AdminJS has no built-in column picker, and richtext is the only
+ * property type it truncates itself (see richtext/list.tsx, `lodash/
+ * truncate` to 15 chars by default) — a plain string field
+ * (default-property-value.tsx) renders the raw value with no wrapper and
+ * no length limit at all.
  *
- * The truncation is done by editing the cell's text node directly rather
- * than a CSS max-height/overflow clip: a <td>'s box height in standard
- * table layout is driven by its row's content regardless of max-height
- * (confirmed live — clientHeight kept matching scrollHeight with
- * max-height set in CSS), so a CSS-only clip silently does nothing here.
+ * The *visible* clamp (2 lines, so a verbose field can't blow out a row's
+ * height) is CSS, in admin-refinements.css — a <td>'s own box height in
+ * standard table layout is driven by its row's content regardless of
+ * max-height (confirmed live — clientHeight kept matching scrollHeight
+ * with max-height set directly on the td), but BasePropertyComponent
+ * wraps every value in a Box (a real <section> inside the cell), and
+ * *that* element clamps normally. So this file no longer needs to cut the
+ * string for display — truncateLongTextCells below only caps how much text
+ * sits in the DOM (mutating it beyond that would be pointless, and this
+ * keeps a pathological multi-KB field from bloating the page) and keeps
+ * `title` supplied with the full value for the hover tooltip.
  *
  * Same "append to document.body, MutationObserver-driven" architecture as
  * admin-sidebar.js and for the same reason: the List table is owned by
@@ -104,7 +109,10 @@
     }
   }
 
-  var TEXT_TRUNCATE_LENGTH = 140;
+  // The visible clamp is CSS now (admin-refinements.css, 2 lines) — this
+  // only bounds how much text stays in the DOM, so it's generous. `title`
+  // (set below) always carries the untruncated value regardless.
+  var TEXT_TRUNCATE_LENGTH = 400;
 
   // Cuts at the last space before the limit rather than mid-word, mirroring
   // AdminJS's own richtext truncation (lodash `truncate`, `separator: ' '`

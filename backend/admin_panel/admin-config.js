@@ -92,6 +92,16 @@ const adminOptions = {
     logo: `${PUBLIC_API_ROOT}/admin-assets/logo.jpg`,
     withMadeWithLove: false,
     theme: {
+      // Threads IBM Plex Sans through every styled-component in the design
+      // system (inputs, buttons, table, drawer...) — `font` is a top-level
+      // key on the theme object, same as `colors` (see @adminjs/design-
+      // system's theme.ts default: `export const font = '\'Roboto\', ...'`,
+      // and e.g. breadcrumbs.tsx reading `theme.font` directly). This is
+      // the primary fix; admin-refinements.css's own type block calls
+      // itself "belt-and-braces" — it only backstops the few places (native
+      // inputs/buttons, our own injected controls using `font-family:
+      // inherit`) that don't read from the theme.
+      font: "'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
       colors: {
         primary100: '#4F46E5',
         primary80: '#6366F1',
@@ -101,23 +111,47 @@ const adminOptions = {
       }
     }
   },
+  // AdminJS's default locale nests every string under the language code
+  // (see locale/en/translation.json — `en.messages.*`, `en.components.*`),
+  // and getLocales() (backend/utils/options-parser/options-parser.ts) merges
+  // this config into that same shape. A flat `translations.messages...`
+  // (no `en` level) merges into a path nothing reads, so it's silently
+  // ignored — which is why the login page still showed AdminJS's stock
+  // "Welcome to AdminJS..." copy despite `loginWelcome` being set below.
+  // `Login.welcomeHeader`/`welcomeMessage` are the keys the login page
+  // actually renders (see frontend/components/login/index.tsx); nesting
+  // both fixes it.
   locale: {
     language: 'en',
     translations: {
-      messages: {
-        loginWelcome: 'Sports Board Administration' // Custom login message
-      }
-    }
+      en: {
+        messages: {
+          loginWelcome: 'Sports Board Administration',
+        },
+        components: {
+          Login: {
+            welcomeHeader: 'Sports Board Administration',
+            welcomeMessage: 'Manage clubs, events, facilities, announcements and the public site content for the Students’ Sports Board, IIT Guwahati.',
+          },
+        },
+      },
+    },
   },
-  // Adds a collapse/expand toggle to the sidebar, and to the List page a
-  // per-resource column-visibility picker plus truncation of overflowing
-  // text cells — AdminJS has none of these built in. See
-  // admin_panel/public/admin-sidebar.{css,js} and admin-list.{css,js} for
-  // the behaviour.
+  // Adds a collapse/expand toggle to the sidebar, a List-page per-resource
+  // column-visibility picker plus truncation of overflowing text cells, and
+  // a spacing/typography refinement pass over the whole panel — AdminJS has
+  // none of these built in. See admin_panel/public/admin-sidebar.{css,js},
+  // admin-list.{css,js} and admin-refinements.css for the behaviour.
+  //
+  // Load order matters: the Google Font must be requested before anything
+  // tries to render in it, and admin-refinements.css corrects values the
+  // other two stylesheets set, so it loads last.
   assets: {
     styles: [
+      'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap',
       `${PUBLIC_API_ROOT}/admin-assets/admin-sidebar.css`,
       `${PUBLIC_API_ROOT}/admin-assets/admin-list.css`,
+      `${PUBLIC_API_ROOT}/admin-assets/admin-refinements.css`,
     ],
     scripts: [
       `${PUBLIC_API_ROOT}/admin-assets/admin-sidebar.js`,
