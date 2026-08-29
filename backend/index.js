@@ -33,6 +33,8 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'uploads')));
+// Custom AdminJS panel assets (see admin_panel/admin-config.js's `assets` option).
+app.use('/admin-assets', express.static(path.join(__dirname, 'admin_panel/public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
   secret: 'supersecretkey',

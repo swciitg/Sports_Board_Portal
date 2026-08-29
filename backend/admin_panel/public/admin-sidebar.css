@@ -1,0 +1,132 @@
+/* Collapsible sidebar + logo sizing for the AdminJS panel.
+ *
+ * AdminJS doesn't ship a collapse toggle, so this adds one. Selectors lean on
+ * the data-css="..." hooks and adminjs_* classes AdminJS's design system
+ * attaches for exactly this kind of override — those are stable across
+ * re-renders. This file is registered as a global `assets` stylesheet
+ * (admin-config.js), so it loads on both the main app shell and the
+ * separate login page — most rules below only match one or the other.
+ *
+ * The collapsed rail is icon-only: it shows just the top-level category
+ * ("Sports Board") and none of the resource links under it. AdminJS toggles
+ * a category's resource links by mounting/unmounting them entirely (there's
+ * no "always open" mode), so admin-sidebar.js forces that category shut
+ * whenever the rail collapses, and this stylesheet disables clicking it back
+ * open — there's no room in a 64px rail to show a resource list anyway.
+ */
+
+[data-css="sidebar"] {
+  transition: width 0.18s ease;
+  overflow: hidden;
+}
+
+#adminjs-sidebar-toggle {
+  position: fixed;
+  top: 24px;
+  left: 284px;
+  z-index: 1000;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid #E0E0E0;
+  background: #fff;
+  color: #4a4a4a;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: left 0.18s ease;
+}
+
+#adminjs-sidebar-toggle:hover {
+  background: #F5F5F5;
+}
+
+html.adminjs-sidebar-collapsed [data-css="sidebar"] {
+  width: 64px !important;
+  min-width: 64px !important;
+}
+
+html.adminjs-sidebar-collapsed #adminjs-sidebar-toggle {
+  left: 48px;
+  /* At full sidebar width the button (fixed at top:24px) sits well clear of
+     the logo horizontally — the image is centered in a 236px-wide content
+     column, nowhere near the button's x position at the sidebar's right
+     edge. Collapsed, that content column shrinks to 48px and the two start
+     sharing the same space: push the button below the (also collapsed,
+     36px) logo instead of just left of it. */
+  top: 60px;
+}
+
+/* Hide the "NAVIGATION" category label — it doesn't fit a 64px rail. */
+html.adminjs-sidebar-collapsed .adminjs_Label,
+html.adminjs-sidebar-collapsed [data-css="sidebar-footer"] {
+  display: none !important;
+}
+
+/* branding.logo (admin-config.js) points AdminJS at logo.jpg, which it
+   renders as the sidebar header's only content — see
+   sidebar-branding.tsx: logo set means an <img>, no company-name text at
+   all. Sized down from AdminJS's own 170px-wide default so it reads as a
+   mark, not a banner; shrinks further once the rail collapses to fit its
+   64px width, and stays visible (unlike the old text version, an image
+   still reads fine at that size, no need to hide it). */
+[data-css="sidebar-logo"] img {
+  max-width: 72px;
+  max-height: 72px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+html.adminjs-sidebar-collapsed [data-css="sidebar-logo"] {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+html.adminjs-sidebar-collapsed [data-css="sidebar-logo"] img {
+  max-width: 36px;
+  max-height: 36px;
+}
+
+/* branding.logo is also used by AdminJS's separate login page (its own
+   template, not the app shell this file otherwise targets — see
+   login-template.tsx and components/login/index.tsx), so this stylesheet
+   reaches it too (it's loaded there as one of the global `assets`). Its
+   StyledLogo caps width at 200px but not height, and has no horizontal
+   centering (its margin is vertical-only) — for a roughly-square image like
+   logo.jpg that rendered ~200px tall inside the login card's fixed 440px
+   height, pushing the email/password fields and the button out past the
+   card's bottom edge. Cap it like the sidebar's copy and center it. */
+.login__Wrapper h5 img {
+  display: block;
+  max-width: 72px;
+  max-height: 72px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  margin: 0 auto 16px;
+}
+
+/* The top-level category row ("Sports Board"): admin-sidebar.js keeps its
+   resource list force-closed while collapsed, and this disables clicking it
+   back open — the row is purely decorative in this state. `> section > ul >
+   li > a` is the top-level link specifically; it's the only row that can
+   exist here once the sub-items are closed, but the selector stays scoped
+   in case that changes. */
+html.adminjs-sidebar-collapsed [data-css="sidebar-resources"] > section > ul > li > a {
+  pointer-events: none;
+  cursor: default;
+  justify-content: center;
+}
+
+/* Its label ("Sports Board") and expand arrow have nothing to do now that
+   the row is inert and always closed — hide both, icon only. */
+html.adminjs-sidebar-collapsed [data-css="sidebar-resources"] .arrow-box,
+html.adminjs-sidebar-collapsed [data-css="sidebar-resources"] > section > ul > li > a > div {
+  display: none !important;
+}

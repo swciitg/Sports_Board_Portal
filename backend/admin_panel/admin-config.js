@@ -34,6 +34,12 @@ export const ADMIN_MOUNT_PATH = process.env.ADMIN_MOUNT_PATH || '/admin';
 const PUBLIC_ADMIN_ROOT = process.env.NODE_ENV === 'development'
   ? ADMIN_MOUNT_PATH
   : `/sports-board/api${ADMIN_MOUNT_PATH}`;
+// Same proxy-prefix reasoning as PUBLIC_ADMIN_ROOT above, but for the custom
+// assets below — they're served from a plain express.static mount (see
+// index.js), not from the admin router, so they sit outside ADMIN_MOUNT_PATH.
+const PUBLIC_API_ROOT = process.env.NODE_ENV === 'development'
+  ? ''
+  : '/sports-board/api';
 
 const DEFAULT_ADMIN = {
   email: process.env.ADMIN_EMAIL,
@@ -83,7 +89,7 @@ const adminOptions = {
   logoutPath: PUBLIC_ADMIN_ROOT + "/logout",
   branding: {
     companyName: 'Sports Board Admin',
-    logo: false,
+    logo: `${PUBLIC_API_ROOT}/admin-assets/logo.jpg`,
     withMadeWithLove: false,
     theme: {
       colors: {
@@ -102,7 +108,13 @@ const adminOptions = {
         loginWelcome: 'Sports Board Administration' // Custom login message
       }
     }
-  }
+  },
+  // Adds a collapse/expand toggle to the sidebar — AdminJS has no built-in
+  // one. See admin_panel/public/admin-sidebar.{css,js} for the behaviour.
+  assets: {
+    styles: [`${PUBLIC_API_ROOT}/admin-assets/admin-sidebar.css`],
+    scripts: [`${PUBLIC_API_ROOT}/admin-assets/admin-sidebar.js`],
+  },
 };
 
 const admin = new AdminJS(adminOptions);
