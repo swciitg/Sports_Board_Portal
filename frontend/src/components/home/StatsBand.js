@@ -20,7 +20,7 @@ export default function StatsBand({ clubCount, facilityCount }) {
           <Reveal
             key={s.label}
             delay={i * 0.06}
-            className="py-9 pr-7 border-r border-white/[.14] last:border-r-0 flex flex-col gap-1.5"
+            className="bg-slate py-9 pr-7 border-r border-white/[.14] last:border-r-0 flex flex-col gap-1.5"
           >
             <span className="font-display text-[44px] md:text-[56px] font-bold leading-[0.9] text-accent">
               {s.value}

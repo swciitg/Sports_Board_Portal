@@ -31,7 +31,7 @@ export default function HeroSection({ heroImage }) {
           IIT Guwahati
         </h1>
         <p className="max-w-[52ch] mt-[22px] mb-0 text-base md:text-lg leading-relaxed text-white/80">
-          Fourteen clubs, six facilities and one board that keeps the campus moving — from the
+          Fourteen clubs, six facilities and one board that keeps the campus moving, from the
           6&nbsp;a.m. track sessions to the Inter&#8209;IIT podium.
         </p>
         <div className="flex gap-3.5 mt-[34px] flex-wrap">
