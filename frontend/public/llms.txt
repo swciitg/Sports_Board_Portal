@@ -1,0 +1,21 @@
+# Sports Board, IIT Guwahati
+
+> The official student body coordinating sports clubs, events and announcements at IIT Guwahati.
+
+The Sports Board, IIT Guwahati oversees the institute's sports clubs, organizes tournaments and events through the academic year, and publishes official announcements for student athletes and the wider campus sporting community.
+
+## Explore
+
+- [Home](https://swc.iitg.ac.in/sports-board/): Overview of the Sports Board and campus sporting life.
+- [Clubs](https://swc.iitg.ac.in/sports-board/clubs): Every sports club at IIT Guwahati, their activities and achievements.
+- [Events](https://swc.iitg.ac.in/sports-board/events): Upcoming and past tournaments and sporting events.
+- [Announcements](https://swc.iitg.ac.in/sports-board/announcements): Official announcements from the Sports Board.
+- [Contacts](https://swc.iitg.ac.in/sports-board/contacts): How to reach the Sports Board office.
+
+## Contact
+
+- Office: Old SAC Building, IIT Guwahati, Guwahati, Assam 781039
+- Phone: +91-361-258162
+- Email: sportsec@iitg.ac.in
+- Instagram: https://www.instagram.com/sports_iit_guwahati/
+- YouTube: https://www.youtube.com/@sportsboardiitguwahati

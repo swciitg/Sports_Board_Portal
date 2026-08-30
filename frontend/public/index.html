@@ -7,8 +7,17 @@
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="Sports Board, IIT Guwahati coordinates sports clubs, events and tournaments on campus, and publishes official announcements for the student sporting community."
     />
+    <link rel="canonical" href="https://swc.iitg.ac.in/sports-board/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sports Board, IIT Guwahati" />
+    <meta
+      property="og:description"
+      content="Sports Board, IIT Guwahati coordinates sports clubs, events and tournaments on campus, and publishes official announcements for the student sporting community."
+    />
+    <meta property="og:url" content="https://swc.iitg.ac.in/sports-board/" />
+    <meta property="og:image" content="https://swc.iitg.ac.in/sports-board/swb_logo.png" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/swb_logo.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -25,10 +34,70 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Sports Board - IIT Guwahati</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SportsOrganization",
+        "name": "Sports Board, IIT Guwahati",
+        "url": "https://swc.iitg.ac.in/sports-board/",
+        "description": "Sports Board, IIT Guwahati coordinates sports clubs, events and tournaments on campus, and publishes official announcements for the student sporting community.",
+        "logo": "https://swc.iitg.ac.in/sports-board/swb_logo.png",
+        "email": "sportsec@iitg.ac.in",
+        "telephone": "+91-361-258162",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Old SAC Building, IIT Guwahati",
+          "addressLocality": "Guwahati",
+          "addressRegion": "Assam",
+          "postalCode": "781039",
+          "addressCountry": "IN"
+        },
+        "sameAs": [
+          "https://www.instagram.com/sports_iit_guwahati/",
+          "https://www.youtube.com/@sportsboardiitguwahati"
+        ]
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <!--
+      Fallback content for clients that don't execute JavaScript (crawlers,
+      curl, etc). React's createRoot().render() replaces these children on
+      mount, so this is never visible to a real, JS-enabled visitor.
+    -->
+    <div id="root">
+      <header>
+        <h1>Sports Board, IIT Guwahati</h1>
+        <p>
+          The Sports Board, IIT Guwahati is the student body responsible for coordinating
+          sporting activities across the Indian Institute of Technology Guwahati campus. It
+          oversees the institute's sports clubs, organizes tournaments and events through the
+          academic year, and publishes announcements for student athletes and the wider campus
+          sporting community. This site lists every sports club on campus along with its
+          activities and achievements, keeps an up to date calendar of events and tournaments,
+          and shares official announcements from the board.
+        </p>
+      </header>
+      <nav aria-label="Primary">
+        <h2>Explore</h2>
+        <ul>
+          <li><a href="/sports-board/">Home</a></li>
+          <li><a href="/sports-board/clubs">Clubs</a></li>
+          <li><a href="/sports-board/events">Events</a></li>
+          <li><a href="/sports-board/announcements">Announcements</a></li>
+          <li><a href="/sports-board/contacts">Contacts</a></li>
+        </ul>
+      </nav>
+      <section>
+        <h2>Contact</h2>
+        <p>
+          Office: Old SAC Building, IIT Guwahati, Guwahati, Assam 781039.<br />
+          Phone: <a href="tel:+91361258162">+91-361-258162</a>.<br />
+          Email: <a href="mailto:sportsec@iitg.ac.in">sportsec@iitg.ac.in</a>.
+        </p>
+      </section>
+    </div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

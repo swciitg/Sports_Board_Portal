@@ -11,7 +11,7 @@ services:
       - "3019:3000"
     env_file:
     - ".env"
-    command: sh -c "cd /app && serve -s build"
+    command: sh -c "cd /app && node server.js"
     networks:
       - frontend_default
 

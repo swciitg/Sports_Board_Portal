@@ -2,7 +2,6 @@ FROM node:22-alpine AS builder
 
 # Set working directory
 WORKDIR /app
-RUN npm install -g serve
 # Copy our node module specification
 COPY package* ./
 

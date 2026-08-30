@@ -7,7 +7,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test --test-force-exit",
     "start": "nodemon index.js"
   },
   "author": "",
@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.20.1"
+    "@types/node": "^22.20.1",
+    "supertest": "^7.1.1"
   }
 }
