@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { LuMail, LuPhone, LuMapPin, LuArrowUpRight, LuIdCard } from "react-icons/lu";
+import { LuMail, LuPhone, LuMapPin, LuIdCard } from "react-icons/lu";
 import { IoLogoLinkedin } from "react-icons/io5";
 import { useHomePageData } from "../hooks/useHomePageData";
 import Container from "../components/Container";
@@ -26,6 +26,11 @@ function ContactCard({ contact }) {
   return (
     <div className="bg-surface flex flex-col h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-22px_rgba(12,13,13,.4)]">
       <div className="relative aspect-square bg-[#ECECEC] overflow-hidden">
+        {contact?.club && (
+          <span className="absolute top-3 left-3 z-10 font-poppins text-[10px] font-semibold tracking-[0.14em] uppercase text-white bg-ink/80 px-2.5 py-1">
+            {contact.club}
+          </span>
+        )}
         {contact?.image && (
           <img src={contact.image} alt={contact.name} className="w-full h-full object-cover" />
         )}
@@ -185,46 +190,24 @@ function ContactsPage() {
         </Container>
       </section>
 
-      {/* Club secretaries */}
+      {/* Club heads */}
       {secretaries.length > 0 && (
         <section className="bg-surface py-16 md:py-24">
           <Container>
-            <Reveal className="mb-9">
-              <SectionHeading
-                eyebrow="Club-wise"
-                title="Club secretaries"
-                size="text-[clamp(44px,4.8vw,72px)]"
-              />
-              <p className="mt-4 mb-0 text-base text-muted max-w-[52ch]">
-                For trials, practice timings and equipment, write to the secretary of the club you
-                are after.
-              </p>
+            <Reveal className="flex items-end justify-between gap-10 pb-8 border-b border-line flex-wrap">
+              <SectionHeading eyebrow="Club-wise" title="Club Heads" size="text-[clamp(44px,4.8vw,72px)]" />
+              <span className="font-poppins text-xs tracking-[0.14em] uppercase text-subtle pb-2">
+                2025–26 tenure
+              </span>
             </Reveal>
 
-            <Reveal delay={0.08} className="bg-white grid grid-cols-1 lg:grid-cols-2">
-              {secretaries.map((s) => (
-                <div
-                  key={s._id || `${s.club}-${s.name}`}
-                  className="grid grid-cols-[1fr_auto] items-center gap-4 px-6 py-5 border-b border-[#EDEDED] transition-colors hover:bg-[#F7FBFC]"
-                >
-                  <div className="flex flex-col gap-0.5">
-                    <span className="font-display font-semibold text-2xl tracking-[0.02em] uppercase text-ink">
-                      {s.club}
-                    </span>
-                    <span className="text-[13px] text-muted">
-                      {s.name}
-                      {s.department ? ` — ${s.department}` : ""}
-                    </span>
-                  </div>
-                  <a
-                    href={`mailto:${s.socialLinks?.mailId || BOARD_MAIL}`}
-                    className="font-poppins text-xs font-semibold tracking-[0.06em] uppercase text-accent-deep inline-flex items-center gap-2 transition-colors hover:text-ink"
-                  >
-                    Mail <LuArrowUpRight />
-                  </a>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mt-10">
+              {secretaries.map((contact, i) => (
+                <Reveal key={contact._id || `${contact.club}-${contact.name}`} delay={(i % 3) * 0.06}>
+                  <ContactCard contact={contact} />
+                </Reveal>
               ))}
-            </Reveal>
+            </div>
           </Container>
         </section>
       )}
