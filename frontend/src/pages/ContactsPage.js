@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { LuMail, LuPhone, LuMapPin, LuIdCard } from "react-icons/lu";
-import { IoLogoLinkedin } from "react-icons/io5";
 import { useHomePageData } from "../hooks/useHomePageData";
 import Container from "../components/Container";
 import Reveal from "../components/Reveal";
@@ -15,14 +14,7 @@ const BOARD_TEL = "+91-361-258162";
 const chip =
   "font-poppins text-[13px] font-medium text-white bg-white/[.14] border border-white/[.28] px-[18px] py-[11px] inline-flex items-center gap-2.5 transition-colors hover:bg-white/[.24]";
 
-const iconButton =
-  "w-10 h-10 border border-[#D8D8D8] inline-flex items-center justify-center text-[17px] text-ink bg-white transition-all duration-200 hover:bg-ink hover:text-white hover:border-ink";
-
 function ContactCard({ contact }) {
-  const mail = contact?.socialLinks?.mailId;
-  const phone = contact?.socialLinks?.phoneNo;
-  const linkedin = contact?.socialLinks?.linkedin;
-
   return (
     <div className="bg-surface flex flex-col h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-22px_rgba(12,13,13,.4)]">
       <div className="relative aspect-square bg-[#ECECEC] overflow-hidden">
@@ -46,34 +38,6 @@ function ContactCard({ contact }) {
             </div>
           )}
         </div>
-        <div className="flex gap-2 pt-1">
-          {mail && (
-            <a href={`mailto:${mail}`} className={iconButton} aria-label="Email">
-              <LuMail />
-            </a>
-          )}
-          {phone && (
-            <a href={`tel:${phone}`} className={iconButton} aria-label="Phone">
-              <LuPhone />
-            </a>
-          )}
-          {linkedin && (
-            <a
-              href={linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={iconButton}
-              aria-label="LinkedIn"
-            >
-              <IoLogoLinkedin />
-            </a>
-          )}
-        </div>
-        {mail && (
-          <div className="font-mono text-[11px] text-subtle border-t border-[#E4E4E4] pt-3 break-all">
-            {mail}
-          </div>
-        )}
       </div>
     </div>
   );

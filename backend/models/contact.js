@@ -27,11 +27,6 @@ const contactSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  socialLinks: {
-    linkedin: { type: String, trim: true },
-    mailId: { type: String, trim: true },
-    phoneNo: { type: Number, trim: true },
-  },
   createdAt: {
     type: Date,
     default: Date.now,
