@@ -26,11 +26,6 @@ function ContactCard({ contact }) {
   return (
     <div className="bg-surface flex flex-col h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-22px_rgba(12,13,13,.4)]">
       <div className="relative aspect-square bg-[#ECECEC] overflow-hidden">
-        {contact?.club && (
-          <span className="absolute top-3 left-3 z-10 font-poppins text-[10px] font-semibold tracking-[0.14em] uppercase text-white bg-ink/80 px-2.5 py-1">
-            {contact.club}
-          </span>
-        )}
         {contact?.image && (
           <img src={contact.image} alt={contact.name} className="w-full h-full object-cover" />
         )}
@@ -90,6 +85,10 @@ function ContactsPage() {
   const [error, setError] = useState(null);
   const { data } = useHomePageData();
   const heroImage = data?.homepage?.[0]?.contactpageimgurl || "";
+  // Admin enters a plain hyphen (e.g. "2025-26"); render it with an en dash
+  // to match the site's typography.
+  const tenureYear = data?.tenureYear?.[0]?.year;
+  const tenureLabel = tenureYear ? `${tenureYear.replace(/-/, "–")} tenure` : "";
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -171,9 +170,11 @@ function ContactsPage() {
         <Container>
           <Reveal className="flex items-end justify-between gap-10 pb-8 border-b border-line flex-wrap">
             <SectionHeading title="The core team" size="text-[clamp(44px,4.8vw,72px)]" />
-            <span className="font-poppins text-xs tracking-[0.14em] uppercase text-subtle pb-2">
-              2025–26 tenure
-            </span>
+            {tenureLabel && (
+              <span className="font-poppins text-xs tracking-[0.14em] uppercase text-subtle pb-2">
+                {tenureLabel}
+              </span>
+            )}
           </Reveal>
 
           {coreTeam.length ? (
@@ -196,9 +197,11 @@ function ContactsPage() {
           <Container>
             <Reveal className="flex items-end justify-between gap-10 pb-8 border-b border-line flex-wrap">
               <SectionHeading eyebrow="Club-wise" title="Club Heads" size="text-[clamp(44px,4.8vw,72px)]" />
-              <span className="font-poppins text-xs tracking-[0.14em] uppercase text-subtle pb-2">
-                2025–26 tenure
-              </span>
+              {tenureLabel && (
+                <span className="font-poppins text-xs tracking-[0.14em] uppercase text-subtle pb-2">
+                  {tenureLabel}
+                </span>
+              )}
             </Reveal>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mt-10">

@@ -6,6 +6,7 @@ export const useHomePageData = () => {
     aboutData: [],
     facilities: [],
     homepage: [],
+    tenureYear: [],
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);

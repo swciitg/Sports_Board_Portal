@@ -12,6 +12,7 @@ import Facilities from "../models/facilities.js";
 import clubMain from "../models/clubMain.js";
 import homepage from "../models/general.js";
 import announcement from "../models/announcement.js";
+import TenureYear from "../models/tenureYear.js";
 
 // The reverse proxy in front of this service strips the '/sports-board/api'
 // prefix from the REQUEST before forwarding it here, so Express itself
@@ -65,6 +66,17 @@ const authenticate = async (email, password) => {
 const adminOptions = {
   resources: [
     AboutUs, Event, Facilities, announcement, clubMain,
+    {
+      resource: TenureYear,
+      // Single-value config: keep exactly one document here. Its `year`
+      // is what the site shows wherever a tenure label appears (currently
+      // both sections of the Contacts page).
+      options: {
+        properties: {
+          year: { label: 'Tenure Year', description: 'e.g. "2025-26". Keep only one entry — the site reads the first one it finds.' },
+        },
+      },
+    },
     {
       resource: Contacts,
       // The schema field is still `description`; relabeled here since admins
