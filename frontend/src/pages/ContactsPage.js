@@ -148,8 +148,8 @@ function ContactsPage() {
             Get in touch
           </h1>
           <p className="max-w-[50ch] mt-[18px] mb-[26px] text-[17px] leading-[1.6] text-white/80">
-            Queries about trials, equipment, tournaments or the Inter&#8209;IIT contingent — reach
-            the right person directly.
+            Got a question about trials, equipment or the Inter&#8209;IIT contingent? Reach the
+            right person directly below.
           </p>
           <div className="flex gap-2.5 flex-wrap">
             <a href={`mailto:${BOARD_MAIL}`} className={chip}>
