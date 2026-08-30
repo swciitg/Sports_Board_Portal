@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { LuMail, LuPhone, LuMapPin, LuArrowUpRight } from "react-icons/lu";
+import { LuMail, LuPhone, LuMapPin, LuArrowUpRight, LuIdCard } from "react-icons/lu";
 import { IoLogoLinkedin } from "react-icons/io5";
 import { useHomePageData } from "../hooks/useHomePageData";
 import Container from "../components/Container";
@@ -39,6 +39,12 @@ function ContactCard({ contact }) {
             {contact?.name}
           </div>
           <div className="text-[15px] text-muted mt-1">{contact?.department}</div>
+          {contact?.description && (
+            <div className="font-poppins text-[11px] font-medium tracking-[0.04em] text-subtle mt-2.5 inline-flex items-center gap-1.5 bg-white border border-[#E4E4E4] px-2.5 py-1">
+              <LuIdCard className="text-accent-deep shrink-0" />
+              {contact.description}
+            </div>
+          )}
         </div>
         <div className="flex gap-2 pt-1">
           {mail && (

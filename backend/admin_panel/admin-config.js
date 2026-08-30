@@ -64,7 +64,21 @@ const authenticate = async (email, password) => {
 
 const adminOptions = {
   resources: [
-    AboutUs, Contacts, Event, Facilities, announcement, clubMain,
+    AboutUs, Event, Facilities, announcement, clubMain,
+    {
+      resource: Contacts,
+      // The schema field is still `description`; relabeled here since admins
+      // use it to record the contact's college ID / college mail.
+      options: {
+        properties: {
+          description: { label: 'College ID/ Mail' },
+          // An empty club is what marks a contact as core team (see the
+          // schema comment on this field) — flag that in the label itself
+          // so it isn't mistaken for a required field.
+          club: { label: 'Club (Only for club secretaries)' },
+        },
+      },
+    },
     {
       resource: homepage,
       // The Leadership section's field names don't say what they hold — label
